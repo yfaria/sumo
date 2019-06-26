@@ -11218,7 +11218,7 @@ which the &%patient of the act is oriented.")
 (subclass Transfer Translocation)
 (documentation Transfer EnglishLanguage "Any &%instance of &%Translocation where the 
 &%agent and the &%patient are not the same thing.")
-(documentation Transfer EnglishLanguage "这是当 &%agent 和 &%patient 不是同一样的东西时的任何 
+(documentation Transfer ChineseLanguage "这是当 &%agent 和 &%patient 不是同一样的东西时的任何 
 &%Translocation 的 &%instance。")
 
 (=>
@@ -12846,7 +12846,7 @@ controlled or uncontrolled, blind or not blind.")
 (subclass DiagnosticProcess Investigating)
 (documentation DiagnosticProcess EnglishLanguage "A &%Process that is carried out for
 the purpose of determining the nature of a &%DiseaseOrSyndrome.")
-(documentation DiagnosticProcess EnglishLanguage "这是为了决定一种 &%DiseaseOrSyndrome 的性质
+(documentation DiagnosticProcess ChineseLanguage "这是为了决定一种 &%DiseaseOrSyndrome 的性质
 而执行的 &%Process。")
 
 (=>
@@ -12860,7 +12860,7 @@ the purpose of determining the nature of a &%DiseaseOrSyndrome.")
 (subclass Searching Investigating)
 (documentation Searching EnglishLanguage "An &%IntentionalProcess which has the purpose 
 for a &%CognitiveAgent to learn the location of a &%Physical.")
-(documentation Searching EnglishLanguage "这是为了让 &%CognitiveAgent 知道一个 &%Physical 的
+(documentation Searching ChineseLanguage "这是为了让 &%CognitiveAgent 知道一个 &%Physical 的
 位置而采取的 &%IntentionalProcess。")
 
 (=>
@@ -14131,7 +14131,7 @@ e.g. most rivers and lakes.")
 e.g. a &%Nation, a mountain, a desert, etc.  Note that a &%LandArea may
 contain some relatively small &%WaterAreas.  For example, Australia is
 a &%LandArea even though it contains various rivers and lakes.")
-(documentation LandArea EnglishLanguage "这是一处主要是坚实地面组成的地区，例如： &%Nation、山、
+(documentation LandArea ChineseLanguage "这是一处主要是坚实地面组成的地区，例如： &%Nation、山、
 沙漠等等。注：&%LandArea 有可能包含相对小范围的 &%WaterArea。例如：澳大利亚是一处 &%LandArea，虽然它也
 有各种各样的河流和湖泊。")
 
