@@ -1,8 +1,12 @@
 # ignore all files in the build/ directory
 tests/ 
 
-# no .tptp files
+# no .tptp or .tff files
 *.tptp
+*.tff
+
+# .ser files are auxiliary files for SigmaKEE
+*.ser
 
 # no Cache.kif andd UserAssertions files
 *_Cache.kif
