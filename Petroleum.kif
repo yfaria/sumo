@@ -1,0 +1,26 @@
+
+;; Authors:
+;; - Alexandre Rademaker (IBM Research) 
+;; - Adam Pease - adam.pease@infosys.com
+
+;; Access to and use of these products is governed by the GNU General
+;; Public License <http://www.gnu.org/copyleft/gpl.html>.  By using
+;; these products, you agree to be bound by the terms of the GPL.
+
+;; https://www.glossary.oilfield.slb.com/Terms/o/oil_pool.aspx, a
+;; (possibly discontinuous) region of instances of Petroleum located
+;; in an UndergroundArea
+
+(subclass Petroleum PetroleumProduct)
+
+(forall (?P ?R ?A)
+  (=>
+   (and (instance ?R Region)
+	(forall (?X)
+	   (=> (part ?X ?R)
+	       (instance ?X Petroleum))
+	(instance ?A UndergroundArea)
+	(located ?C ?A)))
+   (instance ?R OilPool)))
+
+

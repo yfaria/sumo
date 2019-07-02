@@ -1,19 +1,6 @@
-(note TQG25)  ;; boolean version
-
-;; Case elimination.
-;; (partition Organism Animal Plant Microorganism)
-
-(instance Organism25-1 Organism)
 (not (instance Organism25-1 Microorganism))
-(not (instance Organism25-1 Animal))
-
+(instance Organism25-1 Organism)
 (query (instance Organism25-1 Plant))
-
 (answer yes)
-
-
-;; This test fails, perhaps because of insufficient support for
-;; reasoning with lists and list producing functions.
-
-;; TO DO: Describe an expected proof.
-
+(not (instance Organism25-1 Animal))
+(note TQG25)
