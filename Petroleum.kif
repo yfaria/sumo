@@ -20,7 +20,7 @@
 	   (=> (part ?X ?R)
 	       (instance ?X Petroleum))
 	(instance ?A UndergroundArea)
-	(located ?C ?A)))
+	(located ?R ?A)))
    (instance ?R OilPool)))
 
 
