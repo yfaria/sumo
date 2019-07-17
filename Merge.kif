@@ -643,10 +643,10 @@ subclasses in the partition.")
  &%disjoint 的类别 （一个子类别的分区)。C的每一个实例正正是这个分区子类别的一个实例。")
 
 (<=>
-   (partition @ROW)
+   (partition ?CLASS @ROW)
    (and
-      (exhaustiveDecomposition @ROW)
-      (disjointDecomposition @ROW)))
+      (exhaustiveDecomposition ?CLASS @ROW)
+      (disjointDecomposition ?CLASS @ROW)))
 
 (instance relatedInternalConcept BinaryPredicate)
 (instance relatedInternalConcept EquivalenceRelation)
@@ -3132,6 +3132,7 @@ returns the &%List containing those arguments in exactly the same order.")
 (documentation ListFn ChineseLanguage "这是一个可以接受任何数量的参数，然后交出含有跟哪些参数完全
 相同顺序的 &%Function。")
 
+
 (=>
    (exhaustiveDecomposition ?CLASS @ROW)
    (forall (?OBJ)
@@ -3142,6 +3143,14 @@ returns the &%List containing those arguments in exactly the same order.")
                (inList ?ITEM (ListFn @ROW))
                (instance ?OBJ ?ITEM))))))
 
+(=>
+   (exhaustiveDecomposition ?CLASS ?X ?Y)
+   (forall (?OBJ)
+      (=>
+         (instance ?OBJ ?CLASS)
+	 (or (instance ?OBJ ?x)
+	     (instance ?OBJ ?Y)))))
+	     
 (=>
    (disjointDecomposition ?CLASS @ROW)
    (forall (?ITEM)
@@ -3161,11 +3170,16 @@ returns the &%List containing those arguments in exactly the same order.")
          (disjoint ?ITEM1 ?ITEM2))))
 
 (=>
+  (disjointDecomposition ?CLASS ?ROW1 ?ROW2)
+  (disjoint ?ROW1 ?ROW2))
+    
+(=>
   (disjointDecomposition ?CLASS ?ROW1 ?ROW2 ?ROW3)
   (and
     (disjoint ?ROW1 ?ROW2)
     (disjoint ?ROW2 ?ROW3)
     (disjoint ?ROW3 ?ROW1)))
+    
 
 (instance ListOrderFn BinaryFunction)
 (instance ListOrderFn PartialValuedRelation)

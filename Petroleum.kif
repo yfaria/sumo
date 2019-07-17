@@ -1,4 +1,3 @@
-
 ;; Authors:
 ;; - Alexandre Rademaker (IBM Research) 
 ;; - Adam Pease - adam.pease@infosys.com
@@ -11,16 +10,12 @@
 ;; (possibly discontinuous) region of instances of Petroleum located
 ;; in an UndergroundArea
 
-(subclass Petroleum PetroleumProduct)
+(subclass OilPool UndergroundArea)
 
-(forall (?P ?R ?A)
-  (=>
-   (and (instance ?R Region)
-	(forall (?X)
-	   (=> (part ?X ?R)
-	       (instance ?X Petroleum))
-	(instance ?A UndergroundArea)
-	(located ?R ?A)))
-   (instance ?R OilPool)))
-
+(=>
+  (instance ?OP OilPool)
+  (exists (?P)
+    (and
+      (instance ?P Petroleum)
+      (located ?P ?OP))))
 
