@@ -14,7 +14,7 @@
 surrounding any celestial object that has a gravitational field 
 strong enough to prevent the gases from escaping.") 
 
-(documentation Atmosphere EnglishLanguage "&%Atmosphere 是气体的 &%Mixture，它由任何有足够强大
+(documentation Atmosphere ChineseLanguage "&%Atmosphere 是气体的 &%Mixture，它由任何有足够强大
 地深吸力阻止气体溢出的天体物体包围着。") 
 
 (termFormat ChineseLanguage Atmosphere "大气层")
@@ -491,6 +491,10 @@ covered with clouds.")
 (documentation ClearWeather EnglishLanguage "&%ClearWeather represents a condition 
 in which less than 30% of the sky is covered with clouds.")
 
+(documentation ClearWeather ChineseLanguage "&%ClearWeather 代表云遮盖了少于30%天空的情况。")
+
+(termFormat ChineseLanguage ClearWeather "天气晴朗")
+
 (=>
   (and
     (instance ?AREA GeographicArea)
@@ -877,7 +881,39 @@ the total amount of precipitation was ?AMOUNT.")
 (subclass Pampero Windstorm)
 (subclass Squall WeatherProcess)
 (subclass SevereThunderstorm WeatherProcess)
+
 (subclass DustStorm WeatherProcess)
+
+(documentation DustStorm EnglishLanguage "&%DustStorm is the subclass of &%WeatherProcess 
+when &%Wind causes the &%Translation &%subProcess of &%Sand and dust from a dry &%LandArea
+into the &%Atmosphere.")
+
+(documentation DustStorm ChineseLanguage "&%DustStorm 是 &%WeatherProcess 的子类别， 这是当
+&%Wind 通过 &%subProcess 将 &%Sand 和尘土从一处干旱的 &%LandArea &%Translation 到 
+&%Atmosphere.")
+
+(termFormat EnglishLanguage DustStorm "dust storm")
+(termFormat ChineseLanguage DustStorm "沙尘暴")
+
+(=>
+  (instance ?DS DustStorm)
+  (exits (?WD ?TLN ?CAUSE ?PLACE ?STRG ?PATIEN)
+    (and
+      (instance ?WD Wind)
+      (subProcess ?WD ?DS)
+      (instance ?TLN Translocation)
+      (subProcess ?TLN ?DS)
+      (instance ?PLACE LandArea)
+      (origin ?DS ?PLACE)
+      (attribute ?PLACE ?Dry)
+      (surfaceWindSpeed ?PLACE
+        (MeasureFn ?STRG KnotUnitOfSpeed))
+      (greaterThan ?STRG 30)
+      (agent
+      
+      
+  
+
 (subclass Sandstorm WeatherProcess)
 (subclass Zud WeatherProcess)
 (subclass HeavySurf WeatherProcess)
@@ -905,6 +941,11 @@ ocean waves caused by offshore seismic processes.")
 that represents long periods without precipitation, which is damaging 
 to crops, livestock, and human life.")
 
+(documentation Drought ChineseLanguage "&%Drought 是 &%WeatherProcess 的子类别，代表有一段长时
+间没有降雨，对植物、牲畜和人类的生命造成威胁。")
+
+(termFormat ChineseLanguage Drought "干旱")
+
 (=>
   (and
     (instance ?DRYSPELL Drought)
@@ -922,6 +963,25 @@ to crops, livestock, and human life.")
 
 (documentation Desertification EnglishLanguage "&%Desertification represents the 
 &%Process by which desert conditions are spread over an area.")
+
+(documentation Desertification ChineseLanguage "&%Desertification 代表沙漠的环境在一个地区扩散的
+&%Process。")
+
+(termFormat ChineseLanguage Desertification "沙漠化")
+
+;;(=>
+;; (instance ?DF Desertification)
+;; (exists (?DESERT ?AREA)
+;;    (and
+;;      (instance ?DESERT Desert)
+;;      (instance ?AREA Region)
+;;      (eventLocated ?DF ?AREA)
+;;      (result ?DF ?DESERT)
+;;      (BeginFn
+;;        (WhenFn ?DF))
+;;        (not
+;;          (overlapsSpatially ?AREA ?DESERT)))))
+
 
 (documentation Icing EnglishLanguage "&%Icing is the process by which &%Ice is deposited 
 on a %Solid object in polycrystalline form.")
