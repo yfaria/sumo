@@ -7,6 +7,7 @@
 (subclass CarryBot Agent)
     
 ;;Define a BinaryPredicate, canCarry. 
+(documentation canCarry EnglishLanguage "A robot can &%carry the object.")
 (domain canCarry 1 CarryBot)
 (domain canCarry 2 Object)
 (instance canCarry BinaryPredicate)
@@ -72,7 +73,7 @@
             (greaterThan ?HEIGHT ?LENGTHLIMIT)))
       (and
         (defaultMaximumSphereRadius ?OBJECT ?RADIUS)
-        (greaterThan (MultiplicationFn ?RADIUS 2) (MultiplicationFn ?LENGTHLIMIT .5)))))
+        (greaterThan (MultiplicationFn ?RADIUS 2) (DivisionFn ?LENGTHLIMIT 2)))))
   (not
     (canCarry ?ROBOT ?INSTANCE)))
   

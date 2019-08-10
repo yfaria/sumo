@@ -61,7 +61,7 @@ nsubj(?P,?A), dobj(?P,?O), sumo(possesses,?P) ==> (possesses(?A,?O)).
 ; weigh
 ; wish
 ; writes
-; +sumo(?C,?X), isCELTclass(?C,ContentDevelopment) ==> (authors(?A,?X)).
+; +sumo(?C,?X), isChildOf(?C,ContentDevelopment) ==> (authors(?A,?X)).
 
 ;---Demo2 - located---
 num(pm*,?X) ==> !.
@@ -96,6 +96,11 @@ dobj(?W,?P), nsubj(?W,who*), sumo(Writing, ?W) ==> {(and (author ?P ?X) (names ?
 
 nsubj(be*,?X), prep_about(be*,?Y), sumo(?C,?Y), isSubclass(?C,Process) 
 ==> {(and (instance ?Y ?C) (refers ?X ?Y))}.
+
+prep_about(?X,?Y), sumo(ContentDevelopment,?X)
+==> {(and (instance ?X ContentDevelopment) (refers ?X ?Y))}.
+prep_about(?X,?Y), sumo(?C,?X), isSubclass(?C,ContentDevelopment)
+==> {(and (instance ?X ?C) (refers ?X ?Y))}.
 
 prep_about(?X,?Y), sumo(Directing,?X) 
 ==> {(and (instance ?X Directing) (refers ?X ?Y))}.
@@ -291,15 +296,15 @@ value(measure1,?Number), measure(?Subject,measure1), valueToken(?Number,?NumberC
 
 ;; deep ----------
 
-nsubj(be*,?Subject), num(?UnitOfMeasure,?NumberCategory), prep_about(be*,?UnitOfMeasure), advmod(be*,deep*),
-sumo(?ClassOfUnitOfMeasure,?UnitOfMeasure), sumo(?ClassOfAttribute,deep*), isSubclass(?ClassOfAttribute,SubjectiveAssessmentAttribute),
-value(measure1,?Number), valueToken(?Number,?NumberCategory), measure(?Subject,measure1), unit(measure1,?ClassOfUnitOfMeasure)
-==> {(and (depth ?Subject ?Y) (equal ?X ((TopFn ?Subject) (BottomFn ?Subject) ?Number)) (approximateValue ?X ?Y))}.
+;; nsubj(be*,?Subject), num(?UnitOfMeasure,?NumberCategory), prep_about(be*,?UnitOfMeasure), advmod(be*,deep*),
+;; sumo(?ClassOfUnitOfMeasure,?UnitOfMeasure), sumo(?ClassOfAttribute,deep*), isSubclass(?ClassOfAttribute,SubjectiveAssessmentAttribute),
+;; value(measure1,?Number), valueToken(?Number,?NumberCategory), measure(?Subject,measure1), unit(measure1,?ClassOfUnitOfMeasure)
+;; ==> {(and (depth ?Subject ?Y) (equal ?X ((TopFn ?Subject) (BottomFn ?Subject) ?Number)) (approximateValue ?X ?Y))}.
 
-nsubj(deep*,?Subject), cop(deep*,be*), advmod(deep*,about*), num(?UnitOfMeasure,?NumberCategory), pobj(about*,?UnitOfMeasure),
-sumo(?ClassOfAttribute,deep*), isSubclass(?ClassOfAttribute,SubjectiveAssessmentAttribute), equals(?EquivalentUnit,?UnitOfMeasure),
-unit(measure1,?ClassOfUnitOfMeasure), valueToken(?Number,?NumberCategory), measure(?subject,measure1), value(measure1,?Number)
-==> {(and (depth ?Subject ?Y) (equal ?X ((TopFn ?Subject) (BottomFn ?Subject) ?Number)) (approximateValue ?X ?Y))}.
+;; nsubj(deep*,?Subject), cop(deep*,be*), advmod(deep*,about*), num(?UnitOfMeasure,?NumberCategory), pobj(about*,?UnitOfMeasure),
+;; sumo(?ClassOfAttribute,deep*), isSubclass(?ClassOfAttribute,SubjectiveAssessmentAttribute), equals(?EquivalentUnit,?UnitOfMeasure),
+;; unit(measure1,?ClassOfUnitOfMeasure), valueToken(?Number,?NumberCategory), measure(?subject,measure1), value(measure1,?Number)
+;; ==> {(and (depth ?Subject ?Y) (equal ?X ((TopFn ?Subject) (BottomFn ?Subject) ?Number)) (approximateValue ?X ?Y))}.
 
 ;; long ----------
 
@@ -458,7 +463,7 @@ names(?A,?NAME), sumo(Getting,receive*), nsubj(receive*,?A), dobj(receive*,?C), 
 ; Long, wide, deep, thick, tall, high, and old are the only adjectives used as measure words
 
 nsubj(wide*,?S),  cop(wide*,be*),  sumo(?C,wide*),  unit(?M,?U), value(?M,?V), measure(?S,?M) ==> {(width ?S (MeasureFn ?U ?V))}.
-nsubj(deep*,?S),  cop(deep*,be*),  sumo(?C,deep*),  unit(?M,?U), value(?M,?V), measure(?S,?M) ==> {(depth (TopFn ?S) (BottomFn ?S) ?X)}.
+; nsubj(deep*,?S),  cop(deep*,be*),  sumo(?C,deep*),  unit(?M,?U), value(?M,?V), measure(?S,?M) ==> {(depth (TopFn ?S) (BottomFn ?S) ?X)}.
 nsubj(long*,?S),  cop(long*,be*),  sumo(?C,long*),  unit(?M,?U), value(?M,?V), measure(?S,?M) ==> {(length ?S (MeasureFn ?U ?V))}.
 nsubj(thick*,?S), cop(thick*,be*), sumo(?C,thick*), unit(?M,?U), value(?M,?V), measure(?S,?M) ==> {(width ?S (MeasureFn ?U ?V))}.
 nsubj(tall*,?S),  cop(tall*,be*),  sumo(?C,tall*),  unit(?M,?U), value(?M,?V), measure(?S,?M) ==> {(height ?S (MeasureFn ?U ?V))}.
@@ -466,7 +471,7 @@ nsubj(high*,?S),  cop(high*,be*),  sumo(?C,high*),  unit(?M,?U), value(?M,?V), m
 nsubj(old*,?S),   cop(old*,be*),   sumo(?C,old*),   unit(?M,?U), value(?M,?V), measure(?S,?M) ==> {(age ?S (MeasureFn ?U ?V))}.
 
 nsubj(be*, ?S), npadvmod(wide*, ?U2),  advmod(be*,wide*),  sumo(?C,wide*),  unit(?M,?U), value(?M,?V), measure(?S,?M) ==> {(width ?S (MeasureFn ?U ?V))}.
-nsubj(be*, ?S), npadvmod(deep*, ?U2),  advmod(be*,deep*),  sumo(?C,deep*),  unit(?M,?U), value(?M,?V), measure(?S,?M) ==> {(depth (TopFn ?S) (BottomFn ?S) ?X)}.
+; nsubj(be*, ?S), npadvmod(deep*, ?U2),  advmod(be*,deep*),  sumo(?C,deep*),  unit(?M,?U), value(?M,?V), measure(?S,?M) ==> {(depth (TopFn ?S) (BottomFn ?S) ?X)}.
 nsubj(be*, ?S), npadvmod(long*, ?U2),  advmod(be*,long*),  sumo(?C,long*),  unit(?M,?U), value(?M,?V), measure(?S,?M) ==> {(length ?S (MeasureFn ?U ?V))}.
 nsubj(be*, ?S), npadvmod(thick*, ?U2), advmod(be*,thick*), sumo(?C,thick*), unit(?M,?U), value(?M,?V), measure(?S,?M) ==> {(width ?S (MeasureFn ?U ?V))}.
 nsubj(be*, ?S), npadvmod(tall*, ?U2),  advmod(be*,tall*),  sumo(?C,tall*),  unit(?M,?U), value(?M,?V), measure(?S,?M) ==> {(height ?S (MeasureFn ?U ?V))}.
@@ -479,7 +484,7 @@ nsubj(be*, ?S), npadvmod(old*, ?U2),   advmod(be*,old*),   sumo(?C,old*),   unit
 
 ;{isCELTclass(?X,Person)} ==> (isCELTclass(?X,Person)).
 ;{isCELTclass(?X,Time)} ==> (isCELTclass(?X,Time)).
-;{isCELTclass(?X,Object)} ==> (isCELTclass(?X,Time)).
+;{isSubclass(?X,Object)} ==> (isSubclass(?X,Time)).
 
 prep(interested*,in*), sumo(?C,interested*), nsubj(?R,?S), cop(interested*,be*)  ==>
     {(inScopeOfInterest ?S ?O)}.
@@ -498,19 +503,20 @@ prep(interested*,in*), sumo(inScopeOfInterest,interested*), nsubj(interested*,?A
 prep_in(?R,?O), sumo(inScopeOfInterest,interested*), nsubj(?R,?S), cop(interested*,be*)  ==>
     {(inScopeOfInterest ?S ?O)}.
 
-prep_at(?X,?Y), +sumo(?C,?Y), isCELTclass(?C,Object) ==> (located(?X,?Y)).
-nmod:at(?X,?Y), +sumo(?C,?Y), isCELTclass(?C,Object) ==> (located(?X,?Y)).
-prep_in(?X,?Y), +sumo(?C,?Y), isCELTclass(?C,Object) ==> {(orientation ?X ?Y Inside)}.
-nmod:in(?X,?Y), +sumo(?C,?Y), +sumo(?C2,?X), isCELTclass(?C,Object), isSubclass(?C2,BodyPart) ==> {(orientation ?X ?Y Inside)}.
-nmod:into(?X,?Y), +sumo(?C,?Y), isCELTclass(?C,Object) ==> {(destination ?X ?Y)}.
-nmod:in(?X,?Y), +sumo(?C,?Y), isCELTclass(?C,Object) ==> {(destination ?X ?Y)}.
+prep_at(?X,?Y), +sumo(?C,?Y), isChildOf(?C,Object) ==> (located(?X,?Y)).
+nmod:at(?X,?Y), +sumo(?C,?Y), isChildOf(?C,Object) ==> (located(?X,?Y)).
+nmod:in(?X,?Y), +sumo(?C,?Y), isChildOf(?C,Object) ==> {(orientation ?X ?Y Inside)}.
+nmod:in(?C,?Y), +sumo(?C,?Y), isSubclassOf(?C,Covering) ==> {(orientation ?X ?Y Inside)}.
+nmod:in(?X,?Y), +sumo(?C,?Y), +sumo(?C2,?X), isChildOf(?C,Object), isSubclass(?C2,BodyPart) ==> {(orientation ?X ?Y Inside)}.
+nmod:into(?X,?Y), +sumo(?C,?Y), isChildOf(?C,Object) ==> {(destination ?X ?Y)}.
+nmod:in(?X,?Y), +sumo(?C,?Y), isChildOf(?C,Object) ==> {(destination ?X ?Y)}.
 nmod:in(?X,?Y), isInstanceOf(?Y,Region) ==> {(located ?X ?Y)}.
-prep_inside(?X,?Y), +sumo(?C,?Y), isCELTclass(?C,Object) ==> {(orientation ?X ?Y Inside)}.
-prep_outside(?X,?Y), +sumo(?C,?Y), isCELTclass(?C,Object) ==> {(orientation ?X ?Y Outside)}.
-nmod:inside(?X,?Y), +sumo(?C,?Y), isCELTclass(?C,Object) ==> {(orientation ?X ?Y Inside)}.
-nmod:outside(?X,?Y), +sumo(?C,?Y), isCELTclass(?C,Object) ==> {(orientation ?X ?Y Outside)}.
-prep_on(?X,?Y), +sumo(?C,?Y), isCELTclass(?C,Object) ==> (located(?X,?Y)).
-nmod:on(?X,?Y), +sumo(?C,?Y), isCELTclass(?C,Object) ==> (located(?X,?Y)).
+prep_inside(?X,?Y), +sumo(?C,?Y), isChildOf(?C,Object) ==> {(orientation ?X ?Y Inside)}.
+prep_outside(?X,?Y), +sumo(?C,?Y), isChildOf(?C,Object) ==> {(orientation ?X ?Y Outside)}.
+nmod:inside(?X,?Y), +sumo(?C,?Y), isChildOf(?C,Object) ==> {(orientation ?X ?Y Inside)}.
+nmod:outside(?X,?Y), +sumo(?C,?Y), isChildOf(?C,Object) ==> {(orientation ?X ?Y Outside)}.
+prep_on(?X,?Y), +sumo(?C,?Y), isChildOf(?C,Object) ==> (located(?X,?Y)).
+nmod:on(?X,?Y), +sumo(?C,?Y), isChildOf(?C,Object) ==> (located(?X,?Y)).
 
 ;; nmod:on(Terminator-2, Hulu-4), sumo(Terminator,Terminator-2), sumo(HuluProgram,Hulu-4), 
 ;; number(SINGULAR, Terminator-2), number(SINGULAR, Hulu-4), root(ROOT-0, watch-1), 
@@ -551,14 +557,14 @@ prep_by(?S,?H), isInstanceOf(?S,ContentBearingObject), isInstanceOf(?H,Agent) ==
 prep_to(direction*,?A), prep_in(?direction*,?P), isInstanceOf(?P,GeographicArea), isInstanceOf(?A,Agent), -prep_from(?X,?Y) ==>  {(routeBetween ?R Here ?A)}.
 prep_to(direction*,?A), isInstanceOf(?A,Agent), -prep_from(?X,?Y) ==>  {(routeBetween ?R Here ?A)}.
 prep_to(get*,?A), isInstanceOf(?A,Agent), -prep_from(?X,?Y) ==>  {(routeBetween ?R Here ?A)}.
-prep_to(?X,?Y), +sumo(?C,?Y), isCELTclass(?C,Object) ==> (destination(?X,?Y)).
-nmod:to(?X,?Y), +sumo(?C,?Y), isCELTclass(?C,Object) ==> (destination(?X,?Y)).
+prep_to(?X,?Y), +sumo(?C,?Y), isChildOf(?C,Object) ==> (destination(?X,?Y)).
+nmod:to(?X,?Y), +sumo(?C,?Y), isChildOf(?C,Object) ==> (destination(?X,?Y)).
 nmod:to(?X,?Y), +sumo(?C,?Y), isSubclass(Object,?C) ==> (destination(?X,?Y)).
 nmod:to(?X,?Y), isInstanceOf(?Y,Region) ==> (destination(?X,?Y)).
-prep_to(?X,?Y), +sumo(?C,?Y), isCELTclass(?C,Time) ==> {(EndFn ?X ?Y)}.
-prep_toward(?X,?Y), +sumo(?C,?Y), isCELTclass(?C,Object) ==> (destination(?X,?Y)).
-prep_towards(?X,?Y), +sumo(?C,?Y), isCELTclass(?C,Object) ==> (destination(?X,?Y)).
-nmod:from(?X,?Y), +sumo(?C,?Y), isCELTclass(?C,Object) ==> (origin(?X,?Y)).
+prep_to(?X,?Y), +sumo(?C,?Y), isChildOf(?C,Time) ==> {(EndFn ?X ?Y)}.
+prep_toward(?X,?Y), +sumo(?C,?Y), isChildOf(?C,Object) ==> (destination(?X,?Y)).
+prep_towards(?X,?Y), +sumo(?C,?Y), isChildOf(?C,Object) ==> (destination(?X,?Y)).
+nmod:from(?X,?Y), +sumo(?C,?Y), isChildOf(?C,Object) ==> (origin(?X,?Y)).
 nmod:from(?X,?Y), isInstanceOf(?Y,Region) ==> (origin(?X,?Y)).
 
 ; prep_of(drink-4,water-6), sumo(Drinking,drink-4).
@@ -579,22 +585,21 @@ prep_for(?X,?Y), +sumo(?C,?Y), isCELTclass(?C,Time) ==> (duration(?X,?Y)).
 prep_since(?X,?Y), +sumo(?C,?Y), isCELTclass(?C,Time) ==> (starts(?Y,?X)).
 
 prep_through(?X,?Y), +sumo(?C,?Y), isCELTclass(?C,Time) ==> (duration(?X,?Y)).
-prep_through(?X,?Y), +sumo(?C,?Y), isCELTclass(?C,Object) ==> (traverses(?X,?Y)).
+prep_through(?X,?Y), +sumo(?C,?Y), isChildOf(?C,Object) ==> (traverses(?X,?Y)).
 
 prep_with(?X,?Y), +sumo(Human,?Y) ==> (agent(?X,?Y)).
 prep_with(?X,?Y), +sumo(?C,?Y), isCELTclass(?C,Person) ==> (agent(?X,?Y)).
-prep_with(?X,?Y), +sumo(?C,?Y), isCELTclass(?C,Object) ==> (instrument(?X,?Y)).
+prep_with(?X,?Y), +sumo(?C,?Y), isChildOf(?C,Object) ==> (instrument(?X,?Y)).
 
-nmod:with(?A,?Y), dobj(?P,?A), +sumo(?C,?Y), isSubclass(?C,Human) ==> (agent(?P,?Y)).
-nmod:with(?A,?Y), dobj(?P,?A), +sumo(?C,?Y), isInstance(?C,Human) ==> (agent(?P,?Y)).
+nmod:with(?A,?Y), dobj(?P,?A), +sumo(?C,?Y), isChildOf(?C,Human) ==> (agent(?P,?Y)).
 nmod:with(?A,?Y), dobj(?P,?A), +sumo(?C,?Y), isSubclass(?C,Object) ==> (instrument(?P,?Y)).
 
-prep_across(?X,?Y), +sumo(?C,?Y), isCELTclass(?C,Object) ==> (traverses(?X,?Y)).
+prep_across(?X,?Y), +sumo(?C,?Y), isChildOf(?C,Object) ==> (traverses(?X,?Y)).
 
-prep_within(?X,?Y), +sumo(?C,?Y), isCELTclass(?C,Object) ==> (properlyFills(?X,?Y)).
-prep_into(?X,?Y), +sumo(?C,?Y), isCELTclass(?C,Object) ==> (properlyFills(?X,?Y)).
+prep_within(?X,?Y), +sumo(?C,?Y), isChildOf(?C,Object) ==> (properlyFills(?X,?Y)).
+prep_into(?X,?Y), +sumo(?C,?Y), isChildOf(?C,Object) ==> (properlyFills(?X,?Y)).
 
-prep_from(?X,?Y), +sumo(?C,?Y), isCELTclass(?C,Object) ==> (origin(?X,?Y)).
+prep_from(?X,?Y), +sumo(?C,?Y), isChildOf(?C,Object) ==> (origin(?X,?Y)).
 prep_from(?X,?Y), +sumo(?C,?Y), isCELTclass(?C,Time) ==> (BeginFn(?X,?Y)).
 
 prep_until(?X,?Y), +sumo(?C,?Y), isCELTclass(?C,Time) ==> (EndFn(?X,?Y)).
@@ -615,8 +620,8 @@ prep_along_with(?X,?Y), +sumo(?C,?Y), isCELTclass(?C,Person) ==> (agent(?X,?Y)).
 
 ; prep_alongside_of
 ; Issue: parse has, e.g. "prepc_alongside_of(walk-2,of-4)"
-prep_alongside_of(?X,?Y), +sumo(?C,?Y), isCELTclass(?C,Object) ==> {(orientation ?X ?Y Near)}.
-prepc_alongside_of(?X,?Y), +sumo(?C,?Y), isCELTclass(?C,Object) ==> {(orientation ?X ?Y Near)}.
+prep_alongside_of(?X,?Y), +sumo(?C,?Y), isChildOf(?C,Object) ==> {(orientation ?X ?Y Near)}.
+prepc_alongside_of(?X,?Y), +sumo(?C,?Y), isChildOf(?C,Object) ==> {(orientation ?X ?Y Near)}.
 
 ; prep_apart_from
 ; prep_as_for
@@ -635,11 +640,11 @@ prepc_as_per(?X,?Y), +sumo(?C,?Y), isSubclass(?C,Text) ==> (containsInformation(
 ; prep_because_of
 ; prep_close_by
 
-prep_close_by(?X,?Y), +sumo(?C,?Y), isCELTclass(?C,Object) ==> {(orientation ?X ?Y Near)}.
+prep_close_by(?X,?Y), +sumo(?C,?Y), isChildOf(?C,Object) ==> {(orientation ?X ?Y Near)}.
 
 ; prep_close_to
 
-prep_close_to(?X,?Y), +sumo(?C,?Y), isCELTclass(?C,Object) ==> {(orientation ?X ?Y Near)}.
+prep_close_to(?X,?Y), +sumo(?C,?Y), isChildOf(?C,Object) ==> {(orientation ?X ?Y Near)}.
 
 ; prep_contrary_to
 ; prep_compared_to
@@ -655,17 +660,17 @@ prep_close_to(?X,?Y), +sumo(?C,?Y), isCELTclass(?C,Object) ==> {(orientation ?X 
 ; prep_followed_by
 ; prep_inside_of
 
-prep_inside_of(?X,?Y), +sumo(?C,?Y), isCELTclass(?C,Object) ==> {(contains ?X ?Y)}.
+prep_inside_of(?X,?Y), +sumo(?C,?Y), isChildOf(?C,Object) ==> {(contains ?X ?Y)}.
 
 ; prep_instead_of
 ; prep_irrespective_of
 ; prep_next_to
 
-prep_next_to(?X,?Y), +sumo(?C,?Y), isCELTclass(?C,Object) ==> {(orientation ?X ?Y Near)}.
+prep_next_to(?X,?Y), +sumo(?C,?Y), isChildOf(?C,Object) ==> {(orientation ?X ?Y Near)}.
 
 ; prep_near_to
 
-prep_near_to(?X,?Y), +sumo(?C,?Y), isCELTclass(?C,Object) ==> {(orientation ?X ?Y Near)}.
+prep_near_to(?X,?Y), +sumo(?C,?Y), isChildOf(?C,Object) ==> {(orientation ?X ?Y Near)}.
 
 ; prep_off_of
 ; prep_out_of
@@ -674,7 +679,7 @@ prep_near_to(?X,?Y), +sumo(?C,?Y), isCELTclass(?C,Object) ==> {(orientation ?X ?
 ; pref_over
 
 prep_over(?V,?D), +sumo(?T,?D), isInstanceOf(?T,Object), +sumo(?P,?V), isSubclass(?P,Process) ==> {(destination ?V ?T)}.
-prep_over(?V,?Y), +sumo(?C,?Y), isCELTclass(?C,Object) ==> {(orientation ?LOC ?Y Above) (located ?V ?LOC)}.
+prep_over(?V,?Y), +sumo(?C,?Y), isChildOf(?C,Object) ==> {(and (orientation ?LOC ?Y Above) (located ?V ?LOC))}.
 
 ; prep_preliminary_to
 ; prep_preparatory_to
@@ -715,7 +720,7 @@ prep_in_front_of(?V,?Y), nsubj(?V,?Z) ==> {(and (equal ?F (FrontFn ?Y)) (orienta
 ; prep_on_behalf_of
 ; prep_on_top_of
 
-prep_on_top_of(?X,?Y), +sumo(?C,?Y), isCELTclass(?C,Object) ==> {(orientation ?X ?Y On)}.
+prep_on_top_of(?X,?Y), +sumo(?C,?Y), isChildOf(?C,Object) ==> {(orientation ?X ?Y On)}.
 
 ; prep_with_regard_to
 
@@ -733,8 +738,8 @@ prep_on_top_of(?X,?Y), +sumo(?C,?Y), isCELTclass(?C,Object) ==> {(orientation ?X
 
 ; poss: possession modifier
 
-nmod:poss(?O,?Y), isCELTclass(?Y,Human), isCELTclass(?O,Object) ==> {(possesses ?Y ?O)}.
-nmod:poss(?O,?Y), +sumo(Human,?Y), +sumo(?C,?O), isCELTclass(?C,Object) ==> {(possesses ?Y ?O)}.
+nmod:poss(?O,?Y), isCELTclass(?Y,Person), isChildOf(?O,Object) ==> {(possesses ?Y ?O)}.
+nmod:poss(?O,?Y), +sumo(Human,?Y), +sumo(?C,?O), isChildOf(?C,Object) ==> {(possesses ?Y ?O)}.
 
 poss(?R,?S), nsubj(?O,?R), cop(?O,?IS), sumo(?C,?R) ==>
  	(sumo(?C,?R), nsubj(?R,?S), cop(?R,?IS), prep_of(?R,?O)).
@@ -873,9 +878,9 @@ advmod(?V,when*), aux(?V,do*), +sumo(?C,?V), isSubclass(?C,Physical) ==> {(time 
 advmod(?V,when-1), aux(?V,do*), sumo(?C,?V), +nsubj(?V,?A), sumo(?C2,do*)  ==> {(and (agent ?V ?A) (instance ?V ?C) (equals ?WHEN (WhenFn ?V)))}.
 
 ; Who moves the cart?
-nsubj(?V,who-1) ==> {(instance ?I Human) (agent ?V ?I) (names ?I ?WH)}.
+nsubj(?V,who-1) ==> {(and (instance ?I Human) (agent ?V ?I) (names ?I ?WH))}.
 
-nsubj(who-1,?V), cop(who-1,be*), sumo(Human,?V), names(?I,?WH) ==> {(instance ?I Human) (names ?I ?WH) (or (?R ?I ?I2) (?R ?I2 ?I))}.
+nsubj(who-1,?V), cop(who-1,be*), sumo(Human,?V), names(?I,?WH) ==> {(and (instance ?I Human) (names ?I ?WH) (or (?R ?I ?I2) (?R ?I2 ?I)))}.
 +nsubj(who-1,?V), +cop(who-1,be*) ==> {(instance ?I Human) (names ?I ?WH)}.
 
 ; What did John do?
@@ -889,14 +894,41 @@ nsubj(what-1,?O), cop(what-1,be*), +sumo(?C,?O) ==> (instance(?O,?WH)).
 
 ;; -------------------------------------
 
-advmod(?V,?Y), nsubj(?V,?P), +sumo(Indoors,?Y) ==> {(located ?P ?INDOORS) (instance ?INDOORS Indoors) (exists (?BUILDING) (and (instance ?BUILDING Building) (orientation ?INDOORS ?BUILDING Inside)))}.
+advmod(?V,?Y), nsubj(?V,?P), +sumo(Indoors,?Y) ==>
+  {(and
+     (located ?P ?INDOORS)
+     (instance ?INDOORS Indoors)
+     (exists (?BUILDING)
+       (and
+         (instance ?BUILDING Building)
+         (orientation ?INDOORS ?BUILDING Inside))))}.
 
-advmod(?V,?Y), nsubj(?V,?P), +sumo(Outdoors,?Y) ==> {(located ?P ?OUTDOORS) (instance ?OUTDOORS Outdoors) (not (exists (?BUILDING) (and (instance ?BUILDING Building) (orientation ?OUTDOORS ?BUILDING Inside))))}.
+advmod(?V,?Y), nsubj(?V,?P), +sumo(Outdoors,?Y) ==>
+  {(and
+     (located ?P ?OUTDOORS)
+     (instance ?OUTDOORS Outdoors)
+     (exists (?BUILDING)
+       (and
+         (instance ?BUILDING Building)
+         (orientation ?OUTDOORS ?BUILDING Outside))))}.
 
-cop(?X,?Y), nsubj(?X,?P), +sumo(Indoors,?X) ==> {((located ?P ?INDOORS) (instance ?INDOORS Indoors) (exists (?BUILDING) (and (instance ?BUILDING Building) (orientation ?INDOORS ?BUILDING Inside)))}.
+cop(?X,?Y), nsubj(?X,?P), +sumo(Indoors,?X) ==>
+  {(and
+     (located ?P ?INDOORS)
+     (instance ?INDOORS Indoors)
+     (exists (?BUILDING)
+       (and
+         (instance ?BUILDING Building)
+         (orientation ?INDOORS ?BUILDING Inside))))}.
 
-cop(?X,?Y), nsubj(?X,?P), +sumo(Outdoors,?X) ==> {(located ?P ?OUTDOORS) (instance ?OUTDOORS Outdoors) (not (exists (?BUILDING) (and (instance ?BUILDING Building) (orientation ?OUTDOORS ?BUILDING Inside))))}.
-
+cop(?X,?Y), nsubj(?X,?P), +sumo(Outdoors,?X) ==>
+  {(and
+     (located ?P ?OUTDOORS)
+     (instance ?OUTDOORS Outdoors)
+     (exists (?BUILDING)
+       (and
+         (instance ?BUILDING Building)
+         (orientation ?OUTDOORS ?BUILDING Outside))))}.
 
 ;; helper verbs ----------------------------
 
@@ -912,18 +944,20 @@ cop(?X,?Y), nsubj(?X,?P), +sumo(Outdoors,?X) ==> {(located ?P ?OUTDOORS) (instan
 ; John has taken a walk
 ; nsubj(taken-3,John-1), aux(taken-3,has-2), root(ROOT-0,taken-3), det(walk-5,a-4), dobj(taken-3,walk-5), sumo(agent,taken-3), sumo(Human,John-1), sumo(Walking,walk-5)
 
-nsubj(taken*,?S), aux(taken*,has*), dobj(taken*,?V), sumo(?X,taken*), sumo(?C,?V), isSubclass(?C,Process) ==> (nsubj(?V,?S), past(?V,?DUMMY), sumo(?C,?V)).
-nsubj(take*,?S), aux(take*,will*), dobj(take*,?V), sumo(?C,?V), isSubclass(?C,Process) ==> (nsubj(?V,?S), future(?V,?DUMMY), sumo(?C,?V)).
+nsubj(taken*,?S), aux(taken*,has*), dobj(taken*,?V), sumo(?X,taken*), sumo(?C,?V), isSubclass(?C,Process) ==> (nsubj(?V,?S), past(?V,DUMMY), sumo(?C,?V)).
+nsubj(take*,?S), aux(take*,will*), dobj(take*,?V), sumo(?C,?V), isSubclass(?C,Process) ==> (nsubj(?V,?S), future(?V,DUMMY), sumo(?C,?V)).
 nsubj(take*,?S), dobj(take*,?V), sumo(?C,?V), isSubclass(?C,Process) ==> (nsubj(?V,?S), sumo(?C,?V)).
 nsubj(takes*,?S), dobj(takes*,?V), sumo(?C,?V), isSubclass(?C,Process), sumo(?T,takes*) ==> (nsubj(?V,?S), sumo(?C,?V)).
-nsubj(took*,?S), dobj(took*,?V), sumo(?C,?V), isSubclass(?C,Process), sumo(?T,took*) ==> (nsubj(?V,?S), past(?V,?DUMMY), sumo(?C,?V)).
+nsubj(took*,?S), dobj(took*,?V), sumo(?C,?V), isSubclass(?C,Process), sumo(?T,took*) ==> (nsubj(?V,?S), past(?V,DUMMY), sumo(?C,?V)).
 
 ; For phrasal verb "make_up," e.g. "make up a story". Requires that the dobj be a subclass of Process, and uses that for the Suo-Kif process.
 nsubj(make_up*,?S), +dobj(make_up*,?V), sumo(?C,?V), isSubclass(?C,Process) ==> (nsubj(?V,?S), sumo(?C,?V)).
 
-nsubj(make*,?S), aux(make*,have*), dobj(make*,?V), sumo(?C,?V), isSubclass(?C,Process) ==> (nsubj(?V,?S), past(?V,?DUMMY), sumo(?C,?V)).
-nsubj(make*,?S), dobj(make*,?V), tense(PAST,make*), sumo(?C,?V), isSubclass(?C,Process) ==> (nsubj(?V,?S), past(?V,?DUMMY), sumo(?C,?V)).
-nsubj(make*,?S), aux(make*,will*), dobj(make*,?V), sumo(?C,?V), isSubclass(?C,Process) ==> (nsubj(?V,?S), future(?V,?DUMMY), sumo(?C,?V)).
+nsubj(make*,?S), aux(made*,has*), dobj(made*,?V), sumo(?C,?V), isSubclass(?C,Process) ==> (nsubj(?V,?S), past(?V,DUMMY), sumo(?C,?V)).
+nsubj(make*,?S), aux(make*,have*), dobj(make*,?V), sumo(?C,?V), isSubclass(?C,Process) ==> (nsubj(?V,?S), past(?V,DUMMY), sumo(?C,?V)).
+nsubj(make*,?S), aux(made*,have*), dobj(made*,?V), sumo(?C,?V), isSubclass(?C,Process) ==> (nsubj(?V,?S), past(?V,DUMMY), sumo(?C,?V)).
+nsubj(make*,?S), dobj(make*,?V), tense(PAST,make*), sumo(?C,?V), isSubclass(?C,Process) ==> (nsubj(?V,?S), past(?V,DUMMY), sumo(?C,?V)).
+nsubj(make*,?S), aux(make*,will*), dobj(make*,?V), sumo(?C,?V), isSubclass(?C,Process) ==> (nsubj(?V,?S), future(?V,DUMMY), sumo(?C,?V)).
 nsubj(make*,?S), dobj(make*,?V), sumo(?C,?V), isSubclass(?C,Process) ==> (nsubj(?V,?S), sumo(?C,?V)).
 
 ;; ----------------------------------------------------------------------------------------------------------------- 
@@ -948,42 +982,42 @@ advmod(?X,where*), aux(?X,do*) ==> {(destination ?X ?WH)}.
 nsubj(?V,?S), aux(?V,can*), sumo(?C,?V), isSubclass(?C,Process) ==> {(capability ?C agent ?S)}.
 
 ; These can no longer be triggered, since we now get the lemma instead of the verb form.
-; aux(?V,did*), sumo(?C,did*), +sumo(?C2,?V), isSubclass(?C2,Process) ==> (past(?V,?DUMMY)).
+; aux(?V,did*), sumo(?C,did*), +sumo(?C2,?V), isSubclass(?C2,Process) ==> (past(?V,DUMMY)).
 ; aux(?V,does*), sumo(?C,does*), +sumo(?C2,?V), isSubclass(?C2,Process) ==> !.
-; aux(?V,has*) ==> (past(?V,?DUMMY)).
-; aux(?V,had*) ==> (past(?V,?DUMMY)).
+; aux(?V,has*) ==> (past(?V,DUMMY)).
+; aux(?V,had*) ==> (past(?V,DUMMY)).
 
-aux(?V,may*) ==> (possible(?V,?DUMMY)).
-aux(?V,might*) ==> (possible(?V,?DUMMY)).
-aux(?V,can*) ==> (possible(?V,?DUMMY)).
-aux(?V,could*) ==> (possible(?V,?DUMMY)).
-aux(?V,must*) ==> (necessary(?V,?DUMMY)).
-aux(?V,should*) ==> (possible(?V,?DUMMY)).
-aux(?V,should*) ==> (possible(?V,?DUMMY)).
-aux(?V,must*) ==> (possible(?V,?DUMMY)).
+aux(?V,may*) ==> (possible(?V,DUMMY)).
+aux(?V,might*) ==> (possible(?V,DUMMY)).
+aux(?V,can*) ==> (possible(?V,DUMMY)).
+aux(?V,could*) ==> (possible(?V,DUMMY)).
+aux(?V,must*) ==> (necessary(?V,DUMMY)).
+aux(?V,should*) ==> (possible(?V,DUMMY)).
+aux(?V,should*) ==> (possible(?V,DUMMY)).
+aux(?V,must*) ==> (possible(?V,DUMMY)).
 
 ; future perfect progressive
-aux(?V,will*), aux(?V,have-3), aux(?V,be*), tense(FUTURE,?V), aspect(PROGRESSIVEPERFECT,?V) ==> (future(?V,?DUMMY)).
+aux(?V,will*), aux(?V,have-3), aux(?V,be*), tense(FUTURE,?V), aspect(PROGRESSIVEPERFECT,?V) ==> (future(?V,DUMMY)).
 ; future perfect
-aux(?V,will*), aux(?V,have-3), tense(FUTURE,?V), aspect(PERFECT,?V) ==> (future(?V,?DUMMY)).
+aux(?V,will*), aux(?V,have-3), tense(FUTURE,?V), aspect(PERFECT,?V) ==> (future(?V,DUMMY)).
 ; future simple
-aux(?V,will*), tense(FUTURE,?V) ==> (future(?V,?DUMMY)).
+aux(?V,will*), tense(FUTURE,?V) ==> (future(?V,DUMMY)).
 
 ; present perfect progressive
-aux(?V,have*), aux(?V,be*), tense(PRESENT,?V), aspect(PROGRESSIVEPERFECT,?V) ==> (past(?V,?DUMMY)).
+aux(?V,have*), aux(?V,be*), tense(PRESENT,?V), aspect(PROGRESSIVEPERFECT,?V) ==> (past(?V,DUMMY)).
 ; present perfect
-aux(?V,have*), tense(PRESENT,?V), aspect(PERFECT,?V) ==> (past(?V,?DUMMY)).
+aux(?V,have*), tense(PRESENT,?V), aspect(PERFECT,?V) ==> (past(?V,DUMMY)).
 
 ; past perfect progressive
-aux(?V,have*), aux(?V,be*), tense(PAST,?V), aspect(PROGRESSIVEPERFECT,?V) ==> (past(?V,?DUMMY)).
+aux(?V,have*), aux(?V,be*), tense(PAST,?V), aspect(PROGRESSIVEPERFECT,?V) ==> (past(?V,DUMMY)).
 ; past perfect
-aux(?V,have*), tense(PAST,?V), aspect(PERFECT,?V) ==> (past(?V,?DUMMY)).
+aux(?V,have*), tense(PAST,?V), aspect(PERFECT,?V) ==> (past(?V,DUMMY)).
 
 ; simple past
-tense(PAST,?V) ==> (past(?V,?DUMMY)).
+tense(PAST,?V) ==> (past(?V,DUMMY)).
 
 ; passive auxiliary
-; auxpass(?X,?Y), -past(?X,?DUMMY) ==> (past(?X,?DUMMY)).
+; auxpass(?X,?Y), -past(?X,DUMMY) ==> (past(?X,DUMMY)).
 
 ; coordination
 
@@ -1270,7 +1304,7 @@ manner(?X,?Y) ==> {(manner ?X ?Y)}.
 membersType(?X,?Y) ==> {(membersType ?X ?Y)}.
 membersCount(?X,?Y) ==> {(membersCount ?X ?Y)}.
 names(?X,?Y) ==> {(names ?X ?Y)}.
-necessary(?X,?Y) ==> {(necessary ?X ?Y)}.
+necessary(?X,DUMMY) ==> {(necessary ?X DUMMY)}.
 
 ; Causes some tests to fail:   
 ; not(?X,?Y) ==> {(not ?X ?Y)}.
@@ -1278,7 +1312,7 @@ necessary(?X,?Y) ==> {(necessary ?X ?Y)}.
 ;orientation(?X,?Y,?Z) ==> {(orientation ?X ?Y ?Z)}.
 origin(?X,?Y) ==> {(origin ?X ?Y)}.
 patient(?X,?Y) ==> {(patient ?X ?Y)}.
-possible(?X,?Y) ==> {(possible ?X ?Y)}.
+possible(?X,DUMMY) ==> {(possible ?X DUMMY)}.
 properlyFills(?X,?Y) ==> {(properlyFills ?X ?Y)}.
 possesses(?X,?Y) ==> {(possesses ?X ?Y)}.
 refers(?X,?Y) ==> {(refers ?X ?Y)}.
@@ -1314,7 +1348,8 @@ sumo(?T,?X), isInstanceOf(?T,Nation) ==> {(names ?X ?T)}.
 ; ---Demo2 end---
 sumo(?T,?X) ==> {(instance ?X ?T)}.
 
-nsubj(?X,?Y) ==> (agent(?X,?Y)).
+nsubj(?X,?Y), sumo(?C,?Y), isSubclass(?C,Agent) ==> (agent(?X,?Y)).
+nsubj(?X,?Y) ==> (patient(?X,?Y)).
 
 ; time TimeMeasure, Process
 ; person Human, OccupationalRole, SocialRole

@@ -1,0 +1,958 @@
+;; Niles, I., and Pease, A.  2001.  Towards a Standard Upper Ontology.  In
+;; Proceedings of the 2nd International Conference on Formal Ontology in
+;; Information Systems (FOIS-2001), Chris Welty and Barry Smith, eds,
+;; Ogunquit, Maine, October 17-19, 2001.  See also http://www.ontologyportal.org
+
+;; Access to and use of these products is governed by the GNU General Public
+;; License <http://www.gnu.org/copyleft/gpl.html>.
+;; By using these products, you agree to be bound by the terms
+;; of the GPL.
+
+;; copyright Infosys 2019-
+;; author Adam Pease
+;;        adam.pease@infosys.com
+
+(subclass AppleComputerCorporation Corporation)
+(subclass AlphabetCorporation Corporation)
+(termFormat EnglishLanguage AppleComputerCorporation "Apple")
+(termFormat EnglishLanguage AlphabetCorporation "Alphabet")
+
+(subclass AndroidOS PhoneOS)
+(=>
+  (subclass ?OS AndroidOS)
+  (creator ?OS AlphabetCorporation))
+(termFormat EnglishLanguage AndroidOS "Android OS")
+(termFormat EnglishLanguage AndroidOS "Android Operating System")
+(termFormat EnglishLanguage AndroidOS "Android")
+
+(subclass MicrosoftCorporation Corporation)
+(termFormat EnglishLanguage MicrosoftCorporation "Microsoft Corporation")
+(termFormat EnglishLanguage MicrosoftCorporation "Microsoft")
+
+(=>
+  (subclass ?OS WindowsOS)
+  (creator ?OS MicrosoftCorporation))
+
+(subclass FacebookCorporation Corporation)
+(creator Facebook FacebookCorporation)
+(termFormat EnglishLanguage FacebookCorporation "Facebook Corporation")
+(termFormat EnglishLanguage FacebookCorporation "Facebook")
+
+(termFormat EnglishLanguage Facebook "Facebook")
+
+(subclass AppleIOS PhoneOS)
+(termFormat EnglishLanguage AppleIOS "IOS")
+
+(subclass PhoneOS OperatingSystem)
+(canRunOn AppleIOS AppleIPhone)
+
+(=>
+  (subclass ?OS AppleIOS)
+  (creator ?OS AppleComputerCorporation))
+
+;; information from https://en.wikipedia.org/wiki/List_of_Apple_operating_systems
+
+(subclass AppleComputer Computer)
+
+(manufacturer AppleComputer AppleComputerCorporation)
+
+(subclass AppleMacintoshComputer AppleComputer)
+(termFormat EnglishLanguage AppleMacintoshComputer "Mac")
+
+(subclass AppleIPhoneOS1 AppleIOS)
+(documentation AppleIPhoneOS1 EnglishLanguage "The first
+operating system for the Apple derived from
+'OS X' (At the time, 'macOS' was still known as
+'Mac OS X' and not 'OS X' as it was known from 2012 to 2016.)")
+
+(termFormat EnglishLanguage AppleIPhoneOS1 "IOS 1")
+
+(subclass AppleIPhoneOS2 AppleIOS)
+(termFormat EnglishLanguage AppleIPhoneOS2 "IOS 2")
+
+(subclass AppleIPhoneOS3 AppleIOS)
+(termFormat EnglishLanguage AppleIPhoneOS3 "IOS 3")
+
+(subclass AppleIOS4 AppleIOS)
+(documentation AppleIPhoneOS1 EnglishLanguage "continued from iPhone OS 3")
+(termFormat EnglishLanguage AppleIOS4 "IOS 4")
+
+(subclass AppleIOS5 AppleIOS)
+(termFormat EnglishLanguage AppleIOS5 "IOS 5")
+
+(subclass AppleIOS6 AppleIOS)
+(termFormat EnglishLanguage AppleIOS6 "IOS 6")
+
+(subclass AppleIOS7 AppleIOS)
+(termFormat EnglishLanguage AppleIOS7 "IOS 7")
+
+(subclass AppleIOS8 AppleIOS)
+(termFormat EnglishLanguage AppleIOS8 "IOS 8")
+
+(subclass AppleIOS9 AppleIOS)
+(termFormat EnglishLanguage AppleIOS9 "IOS 9")
+
+(subclass AppleIOS10 AppleIOS)
+(termFormat EnglishLanguage AppleIOS10 "IOS 10")
+
+(subclass AppleIOS11 AppleIOS)
+(termFormat EnglishLanguage AppleIOS11 "IOS 11")
+
+(subclass AppleIOS12 AppleIOS)
+(termFormat EnglishLanguage AppleIOS12 "IOS 12")
+
+(subclass AppleMacOS OperatingSystem)
+(subclass AppleMacOSSystem1 AppleMacOS)
+(subclass AppleMacOSSystem2 AppleMacOS)
+(subclass AppleMacOSSystem3 AppleMacOS)
+(subclass AppleMacOSSystem4 AppleMacOS)
+
+(subclass AppleMacOSSystem5 AppleMacOS)
+(documentation AppleMacOSSystem5 EnglishLanguage "Mac OS version also marketed as System 5")
+
+(subclass AppleMacOSSystem6 AppleMacOS)
+(documentation AppleMacOSSystem6 EnglishLanguage "Mac OS version also marketed as System 6")
+
+(subclass AppleMacOSSystem7 AppleMacOS)
+(documentation AppleMacOSSystem7 EnglishLanguage "Mac OS version. System 7.5.1 was the first
+referred to as Mac OS, Mac OS 7.6 was the first officially to be branded as 'Mac OS'")
+
+(subclass AppleMacOS8 AppleMacOS)
+(subclass AppleMacOS9 AppleMacOS)
+(documentation AppleMacOSSystem7 EnglishLanguage "Mac OS version. Mac OS 9.2.2 was the
+last version of Classic Mac OS")
+(termFormat EnglishLanguage AppleMacOS "Mac OS")
+
+(subclass AppleMacOSX AppleMacOS)
+
+
+(documentation MacOSXPublicBeta EnglishLanguage "Mac OS X Public Beta – code name Kodiak")
+(termFormat EnglishLanguage MacOSXPublicBeta "Mac OS X Public Beta")
+(termFormat EnglishLanguage MacOSXPublicBeta "Mac OS Kodiak")
+(termFormat EnglishLanguage MacOSXPublicBeta "Kodiak")
+(subclass MacOSXPublicBeta AppleMacOSX)
+
+(documentation MacOSX10-0 EnglishLanguage "Mac OS X 10.0 – code name Cheetah")
+(termFormat EnglishLanguage MacOSX10-0 "Mac OS 10.0")
+(termFormat EnglishLanguage MacOSX10-0 "Mac OS Cheetah")
+(termFormat EnglishLanguage MacOSX10-0 "Cheetah")
+(subclass MacOSX10-0 AppleMacOSX)
+
+(documentation MacOSX10-1 EnglishLanguage "Mac OS X 10.1 – code name Puma")
+(termFormat EnglishLanguage MacOSX10-1 "Mac OS 10.1")
+(termFormat EnglishLanguage MacOSX10-1 "Mac OS Puma")
+(termFormat EnglishLanguage MacOSX10-1 "Puma")
+(subclass MacOSX10-1 AppleMacOSX)
+
+(documentation MacOSX10-2 EnglishLanguage "Mac OS X 10.2 – also marketed as Jaguar")
+(termFormat EnglishLanguage MacOSX10-2 "Mac OS 10.2")
+(termFormat EnglishLanguage MacOSX10-2 "Mac OS Jaguar")
+(termFormat EnglishLanguage MacOSX10-2 "Jaguar")
+(subclass MacOSX10-2 AppleMacOSX)
+
+(documentation MacOSXPanther EnglishLanguage "Mac OS X Panther – 10.3")
+(termFormat EnglishLanguage MacOSXPanther "Mac OS 10.3")
+(termFormat EnglishLanguage MacOSXPanther "Mac OS Panther")
+(termFormat EnglishLanguage MacOSXPanther "Panther")
+(subclass MacOSXPanther AppleMacOSX)
+
+(documentation MacOSXTiger EnglishLanguage "Mac OS X Tiger – 10.4")
+(termFormat EnglishLanguage MacOSXTiger "Mac OS 10.4")
+(termFormat EnglishLanguage MacOSXTiger "Mac OS Tiger")
+(termFormat EnglishLanguage MacOSXTiger "Tiger")
+(subclass MacOSXTiger AppleMacOSX)
+
+(documentation MacOSXLeopard EnglishLanguage "Mac OS X Leopard – 10.5")
+(termFormat EnglishLanguage MacOSXLeopard "Mac OS 10.5")
+(termFormat EnglishLanguage MacOSXLeopard "Mac OS Leopard")
+(termFormat EnglishLanguage MacOSXLeopard "Leopard")
+(subclass MacOSXLeopard AppleMacOSX)
+
+(documentation MacOSXSnow EnglishLanguage "Leopard Mac OS X Snow Leopard – 10.6")
+(termFormat EnglishLanguage MacOSXSnowLeopard "Mac OS 10.6")
+(termFormat EnglishLanguage MacOSXSnowLeopard "Mac OS Snow Leopard")
+(termFormat EnglishLanguage MacOSXSnowLeopard "Snow Leopard")
+(subclass MacOSXSnow AppleMacOSX)
+
+(documentation MacOSXLion EnglishLanguage "Mac OS X Lion – 10.7 – also marketed as OS X Lion")
+(termFormat EnglishLanguage MacOSXLion "Mac OS 10.7")
+(termFormat EnglishLanguage MacOSXLion "Mac OS Lion")
+(termFormat EnglishLanguage MacOSXLion "Lion")
+(subclass MacOSXLion AppleMacOSX)
+
+(documentation MacOSXMountainLion EnglishLanguage "OS X Mountain Lion – 10.8")
+(termFormat EnglishLanguage MacOSXMountainLion "OS 10.8")
+(termFormat EnglishLanguage MacOSXMountainLion "Mac OS Mountain Lion")
+(termFormat EnglishLanguage MacOSXMountainLion "Mountain Lion")
+(subclass MacOSXMountainLion AppleMacOSX)
+
+(documentation MacOSXMavericks EnglishLanguage "OS X Mavericks – 10.9")
+(termFormat EnglishLanguage MacOSXMavericks "OS 10.9")
+(termFormat EnglishLanguage MacOSXMavericks "Mac OS Mavericks")
+(termFormat EnglishLanguage MacOSXMavericks "Mavericks")
+(subclass MacOSXMavericks AppleMacOSX)
+
+(documentation MacOSXYosemite EnglishLanguage "OS X Yosemite – 10.10")
+(termFormat EnglishLanguage MacOSXYosemite "OS 10.10")
+(termFormat EnglishLanguage MacOSXYosemite "Mac OS Yosemite")
+(termFormat EnglishLanguage MacOSXYosemite "Yosemite")
+(subclass MacOSXYosemite AppleMacOSX)
+
+(documentation MacOSXElCapitan EnglishLanguage "OS X El Capitan – 10.11")
+(termFormat EnglishLanguage MacOSXElCapitan "OS 10.11")
+(termFormat EnglishLanguage MacOSXElCapitan "Mac OS El Capitan")
+(termFormat EnglishLanguage MacOSXElCapitan "El Capitan")
+(subclass MacOSXElCapitan AppleMacOSX)
+
+(documentation MacOSSierra EnglishLanguage "macOS Sierra – 10.12")
+(termFormat EnglishLanguage MacOSSierra "macOS 10.12")
+(termFormat EnglishLanguage MacOSSierra "Mac OS Sierra")
+(termFormat EnglishLanguage MacOSSierra "Sierra")
+(subclass MacOSSierra AppleMacOSX)
+
+(documentation MacOSHighSierra EnglishLanguage "macOS High Sierra – 10.13")
+(termFormat EnglishLanguage MacOSHighSierra "macOS 10.13")
+(termFormat EnglishLanguage MacOSHighSierra "Mac OS High Sierra")
+(termFormat EnglishLanguage MacOSHighSierra "High Sierra")
+(subclass MacOSHighSierra AppleMacOSX)
+
+(documentation MacOSMojave EnglishLanguage "macOS Mojave – 10.14")
+(termFormat EnglishLanguage MacOSMojave "macOS 10.14")
+(termFormat EnglishLanguage MacOSMojave "Mac OS Mojave")
+(termFormat EnglishLanguage MacOSMojave "Mojave")
+(subclass MacOSMojave AppleMacOSX)
+
+(documentation MacOSCatalina EnglishLanguage "macOS Catalina - 10.15")
+(termFormat EnglishLanguage MacOSCatalina "macOS 10.15")
+(termFormat EnglishLanguage MacOSCatalina "Mac OS Catalina")
+(termFormat EnglishLanguage MacOSCatalina "Catalina")
+(subclass MacOSCatalina AppleMacOSX)
+
+(subclass AppleIPad TabletComputer)
+(subclass AppleIPad AppleComputer)
+(documentation AppleIPad EnglishLanguage "&%TabletComputer developed and
+sold by &%AppleComputerCorporation")
+(termFormat EnglishLanguage AppleIPad "iPad")
+
+(subclass AppleIPhone MobileCellPhone)
+(subclass AppleIPhone AppleComputer)
+(documentation AppleIPhone EnglishLanguage "&%MobileCellPhone developed and
+sold by &%AppleComputerCorporation")
+(termFormat EnglishLanguage AppleIPhone "iPhone")
+
+(subclass AppleIMac AppleComputer)
+(documentation AppleIMac EnglishLanguage "&%Computer developed and
+sold by &%AppleComputerCorporation")
+(termFormat EnglishLanguage AppleIMac "iMac")
+(canRunOn AppleMacOSX AppleIMac)
+
+(subclass AppleMacPro AppleComputer)
+(documentation AppleMacPro EnglishLanguage "&%Computer developed and
+sold by &%AppleComputerCorporation")
+(termFormat EnglishLanguage AppleMacPro "Mac Pro")
+(canRunOn AppleMacOSX AppleMacPro)
+
+(subclass AppleMacBookPro AppleComputer)
+(subclass AppleMacBookPro LaptopComputer)
+(documentation AppleMacBookPro EnglishLanguage "&%Computer developed and
+sold by &%AppleComputerCorporation")
+(termFormat EnglishLanguage AppleMacBookPro "Macbook Pro")
+(canRunOn AppleMacOSX AppleMacBookPro)
+
+(subclass AppleMacBookAir AppleComputer)
+(subclass AppleMacBookAir LaptopComputer)
+(documentation AppleMacBookAir EnglishLanguage "&%Computer developed and
+sold by &%AppleComputerCorporation")
+(termFormat EnglishLanguage AppleMacBookAir "Macbook Air")
+(canRunOn AppleMacOSX AppleMacBookAir)
+
+(subclass AppleMacBook AppleComputer)
+(subclass AppleMacBook LaptopComputer)
+(documentation AppleMacBook EnglishLanguage "&%Computer developed and
+sold by &%AppleComputerCorporation")
+(termFormat EnglishLanguage AppleMacBook "Macbook")
+(canRunOn AppleMacOSX AppleMacBook)
+
+(subclass AppleIPod AppleComputer)
+(subclass AppleIPod MediaSystem)
+(documentation AppleIPod EnglishLanguage "&%Computer developed and
+sold by &%AppleComputerCorporation for playing &%Recordings")
+(termFormat EnglishLanguage AppleIPod "iPod")
+
+(subclass AppleIPodTouch AppleIPod)
+(documentation AppleIPodTouch EnglishLanguage "&%Computer developed and
+sold by &%AppleComputerCorporation for playing &%Recordings")
+(termFormat EnglishLanguage AppleIPodTouch "iPod touch")
+
+(subclass AppleIPodNano AppleIPod)
+(documentation AppleIPodNano EnglishLanguage "&%Computer developed and
+sold by &%AppleComputerCorporation for playing &%Recordings")
+(termFormat EnglishLanguage AppleIPodNano "iPod nano")
+
+(subclass AppleIPodShuffle AppleIPod)
+(documentation AppleIPodShuffle EnglishLanguage "&%Computer developed and
+sold by &%AppleComputerCorporation for playing &%Recordings")
+(termFormat EnglishLanguage AppleIPodShuffle "iPod shuffle")
+
+(subclass AppleIPodClassic AppleIPod)
+(documentation AppleIPodClassic EnglishLanguage "&%Computer developed and
+sold by &%AppleComputerCorporation for playing &%Recordings")
+(termFormat EnglishLanguage AppleIPodClassic "iPod classic")
+
+(subclass AppleGarageBand ComputerProgram)
+(termFormat EnglishLanguage AppleGarageBand "GarageBand")
+
+(subclass AppleIMovie ComputerProgram)
+(termFormat EnglishLanguage AppleIMovie "iMovie")
+
+(subclass AppleIMessages ComputerProgram)
+(termFormat EnglishLanguage AppleIMessages "iMessages")
+
+(subclass AppleICloud ComputerProgram)
+(termFormat EnglishLanguage AppleICloud "iCloud")
+
+(subclass AppleILife ComputerProgram)
+(termFormat EnglishLanguage AppleILife "iLife")
+
+(subclass AppleIWork ComputerProgram)
+(termFormat EnglishLanguage AppleIWork "iWork")
+
+(subclass AppleFaceTime ComputerProgram)
+(termFormat EnglishLanguage AppleFaceTime "FaceTime")
+
+(subclass AppleSystemManagementController EngineeringComponent)
+(termFormat EnglishLanguage AppleSystemManagementController "SMC")
+(termFormat EnglishLanguage AppleSystemManagementController "System Management Controller")
+(manufacturer AppleSystemManagementController AppleComputerCorporation)
+
+(subclass AppleSafari WebBrowser)
+(creator AppleSafari AppleComputerCorporation)
+(termFormat EnglishLanguage AppleSafari "Safari")
+
+(subclass AppleSetupAssistant ComputerProgram)
+(creator AppleSetupAssistant AppleComputerCorporation)
+(termFormat EnglishLanguage AppleSetupAssistant "Setup Assistant")
+
+(subclass AppleMigrationAssistant ComputerProgram)
+(creator AppleMigrationAssistant AppleComputerCorporation)
+(termFormat EnglishLanguage AppleMigrationAssistant "Migration Assistant")
+
+
+;; https://en.wikipedia.org/wiki/List_of_Microsoft_operating_systems
+
+
+(documentation WindowsOS1 EnglishLanguage "Microsoft Windows 1.0 (1985)")
+(termFormat EnglishLanguage WindowsOS1 "Windows 1.0")
+(subclass WindowsOS1 WindowsOS)
+
+(documentation WindowsOS2 EnglishLanguage "Microsoft Windows 2.0 (1987)")
+(termFormat EnglishLanguage WindowsOS2 "Windows 2.0")
+(subclass WindowsOS2 WindowsOS)
+
+(documentation WindowsOS3 EnglishLanguage "Microsoft Windows 3.x (1990)")
+(termFormat EnglishLanguage WindowsOS3 "Windows 3")
+(subclass WindowsOS3 WindowsOS)
+
+(documentation WindowsOS95 EnglishLanguage "Microsoft Windows 95 (1995)")
+(termFormat EnglishLanguage WindowsOS95 "Windows 95")
+(subclass WindowsOS95 WindowsOS)
+
+(documentation Windows98 EnglishLanguage "Microsoft Windows 98 (1998)")
+(termFormat EnglishLanguage Windows98 "Windows 98")
+(subclass Windows98 WindowsOS)
+
+(documentation WindowsME EnglishLanguage "Microsoft Windows ME (2000)")
+(termFormat EnglishLanguage WindowsME "Windows ME")
+(subclass WindowsME WindowsOS)
+
+(documentation WindowsXP EnglishLanguage "Microsoft Windows XP (2001)")
+(termFormat EnglishLanguage WindowsXP "Windows XP")
+(subclass WindowsXP WindowsOS)
+
+(documentation WindowsVista EnglishLanguage "Microsoft Windows Vista (2006)")
+(termFormat EnglishLanguage WindowsVista "Windows Vista")
+(subclass WindowsVista WindowsOS)
+
+(documentation Windows7 EnglishLanguage "Microsoft Windows 7 (2009)")
+(termFormat EnglishLanguage Windows7 "Windows 7")
+(subclass Windows7 WindowsOS)
+
+(documentation Windows8 EnglishLanguage "Microsoft Windows 8 (2012)")
+(termFormat EnglishLanguage Windows8 "Windows 8")
+(subclass Windows8 WindowsOS)
+
+(documentation Windows8-1 EnglishLanguage "Microsoft Windows 8.1 (2013)")
+(termFormat EnglishLanguage Windows8-1 "Windows 8.1")
+(subclass Windows8-1 WindowsOS)
+
+(documentation Windows10 EnglishLanguage "Microsoft Windows 10 (2015)")
+(termFormat EnglishLanguage Windows10 "Windows 10")
+(subclass Windows10 WindowsOS)
+
+(documentation CDMANetwork EnglishLanguage "Code-division multiple access (CDMA)
+is a channel access method used by various radio communication technologies.
+CDMA is an example of multiple access, where several transmitters can send
+information simultaneously over a single communication channel. This allows
+several users to share a band of frequencies (see bandwidth). To permit this
+without undue interference between the users, CDMA employs spread spectrum
+technology and a special coding scheme (where each transmitter is assigned a
+code). (from Wikipedia)")
+(termFormat EnglishLanguage CDMANetwork "CDMA Network")
+(termFormat EnglishLanguage CDMANetwork "CDMA")
+(termFormat EnglishLanguage CDMANetwork "Code-division multiple access")
+
+(documentation 2GNetwork EnglishLanguage "2G (or 2-G) is short for second-generation
+cellular technology. 2G cellular networks were commercially launched on the GSM
+standard in Finland by Radiolinja (now part of Elisa Oyj) in 1991. With General Packet
+Radio Service (GPRS), 2G offers a theoretical maximum transfer speed of 50 kbit/s
+(40 kbit/s in practice). With EDGE (Enhanced Data Rates
+for GSM Evolution), there is a theoretical maximum transfer speed of 1 Mbit/s
+(500 kbit/s in practice).  The most common 2G technology was the time division
+multiple access (TDMA)-based GSM, originally from Europe but used in most of the
+world outside North America. Over 60 GSM operators were also using CDMA2000 in
+the 450 MHz frequency band (CDMA450) by 2010. (from Wikipedia)")
+
+(subclass 2GNetwork CellNetwork)
+(termFormat EnglishLanguage 2GNetwork "2G")
+(termFormat EnglishLanguage 2GNetwork "2G network")
+
+(=>
+  (and
+    (instance ?N 2GNetwork)
+    (bandwidth ?N ?M))
+  (lessThan ?M (MeasureFn BitsPerSecond 40000)))
+
+(subclass 3GNetwork CellNetwork)
+(documentation 3GNetwork EnglishLanguage "3G, short for third generation, is the
+third generation of wireless mobile telecommunications technology. It is the
+upgrade for 2G and 2.5G GPRS networks, for faster internet speed. This is based
+on a set of standards used for mobile devices and mobile telecommunications use
+services and networks that comply with the International Mobile
+Telecommunications-2000 (IMT-2000) specifications by the International
+Telecommunication Union. 3G finds application in wireless voice telephony, mobile
+Internet access, fixed wireless Internet access, video calls and mobile TV.
+3G telecommunication networks support services that provide an information
+transfer rate of at least 0.2 Mbit/s. (from Wikipedia)")
+
+(termFormat EnglishLanguage 3GNetwork "3G")
+(termFormat EnglishLanguage 3GNetwork "3G network")
+
+(=>
+  (and
+    (instance ?N 3GNetwork)
+    (bandwidth ?N ?M))
+  (lessThan ?M (MeasureFn BitsPerSecond 200000)))
+
+(subclass 4GNetwork CellNetwork)
+(documentation 3GNetwork EnglishLanguage "4G is the fourth generation of broadband
+cellular network technology, succeeding 3G. A 4G system must provide capabilities
+defined by ITU in IMT Advanced. Potential and current applications include amended
+mobile web access, IP telephony, gaming services, high-definition mobile TV, video
+conferencing, and 3D television. In March 2009, the International Telecommunications
+Union-Radio communications sector (ITU-R) specified a set of requirements for 4G
+standards, named the International Mobile Telecommunications Advanced (IMT-Advanced)
+specification, setting peak speed requirements for 4G service at 100 megabits per
+second (Mbit/s)(=12.5 megabytes per second) for high mobility communication (such
+as from trains and cars) and 1 gigabit per second (Gbit/s) for low mobility
+communication (such as pedestrians and stationary users).(from Wikipedia)")
+
+(termFormat EnglishLanguage 4GNetwork "4G")
+(termFormat EnglishLanguage 4GNetwork "4G network")
+
+(=>
+  (and
+    (instance ?N 4GNetwork)
+    (bandwidth ?N ?M))
+  (lessThan ?M (MeasureFn BitsPerSecond (GigaFn 1))))
+
+(subclass 5GNetwork CellNetwork)
+(documentation 5GNetwork EnglishLanguage "5G is the fifth generation cellular network
+technology. The industry association 3GPP defines any system using '5G NR' (5G New
+Radio) software as '5G', a definition that came into general use by late 2018. Others
+may reserve the term for systems that meet the requirements of the ITU IMT-2020. 3GPP
+will submit their 5G NR to the ITU. It follows 2G, 3G and 4G and their respective
+associated technologies (such as GSM, UMTS, LTE, LTE Advanced Pro and others).
+(from Wikipedia)")
+
+(termFormat EnglishLanguage 5GNetwork "5G")
+(termFormat EnglishLanguage 5GNetwork "5G network")
+
+(subclass WirelessNetwork ComputerNetwork)
+
+(documentation WirelessNetwork EnglishLanguage "A &%ComputerNetwork that uses some sort
+of communication not over a &%Cable at some point during every transmission.")
+
+(=>
+    (and
+      (instance ?CONN WirelessNetwork)
+      (instance ?COM NetworkCommunication)
+      (instrument ?COM ?CONN)
+      (path ?COM ?PATH))
+    (exists (?PART)
+      (and
+        (part ?PART ?PATH)
+        (not
+          (instance ?PART Cable)))))
+
+(subclass Wifi WirelessNetwork)
+(documentation Wifi EnglishLanguage "Wi-Fi is a family of radio technologies commonly
+used for wireless local area networking (WLAN) of devices, It is based on the IEEE
+802.11 family of standards. Wi‑Fi is a trademark of the Wi-Fi Alliance, which
+restricts the use of the term Wi-Fi Certified to products that successfully complete
+interoperability certification testing. Wi-Fi uses multiple
+parts of the IEEE 802 protocol family and is designed to seamlessly interwork with
+its wired sister protocol Ethernet. (from Wikipedia)")
+
+(termFormat EnglishLanguage Wifi "Wifi")
+(termFormat EnglishLanguage Wifi "Wi-fi")
+
+(subclass CellNetwork WirelessNetwork)
+(termFormat EnglishLanguage CellNetwork "cellular network")
+(termFormat EnglishLanguage CellNetwork "cell network")
+
+(subclass BluetoothNetwork WirelessNetwork)
+(documentation BluetoothNetwork EnglishLanguage "Bluetooth is a wireless technology
+standard for exchanging data between fixed and mobile devices over short distances
+using short-wavelength UHF radio waves in the industrial, scientific and medical
+radio bands, from 2.400 to 2.485 GHz, and building personal area networks (PANs).
+It was originally conceived as a wireless alternative to RS-232 data cables. (from Wikipedia)")
+(termFormat EnglishLanguage BluetoothNetwork "Bluetooth")
+(termFormat EnglishLanguage BluetoothNetwork "Bluetooth network")
+
+(instance NetworkCommunicationFn UnaryFunction)
+(rangeSubclass NetworkCommunicationFn NetworkCommunication)
+(domainSubclass NetworkCommunicationFn 1 ComputerNetwork)
+(documentation NetworkCommunicationFn EnglishLanguage "A &%Function that returns an
+class of &%NetworkCommunication over the given type of &%ComputerNetwork.")
+(format EnglishLanguage NetworkCommunicationFn "communication over %1")
+(termFormat EnglishLanguage NetworkCommunicationFn "network communication function")
+
+(=>
+  (instance ?WN (NetworkCommunicationFn WirelessNetwork))
+  (exists (?R)
+    (and
+      (instance ?R RadiatingElectromagnetic)
+      (subProcess ?R ?WN))))
+
+(instance carrierFrequency BinaryPredicate)
+(domain carrierFrequency 1 Radiating)
+(documentation carrierFrequency EnglishLanguage "The frequency of the carrier signal
+encoded as frequency modulation (FM)")
+(format EnglishLanguage carrierFrequency "the frequency of the carrier of %1 is %2")
+(termFormat EnglishLanguage carrierFrequency "carrier frequency")
+
+;; lambda = c / f
+;; c = 299,792,458 m/s
+
+(=>
+  (and
+    (instance ?R RadiatingElectromagnetic)
+    (carrierFrequency ?R (MeasureFn Hertz ?HZ))
+    (wavelength ?R (MeasureFn Meter ?L)))
+  (equal
+    (MeasureFn Meter ?L)
+    (MeasureFn Meter (DivisionFn 299792458 ?HZ))))
+
+(=>
+  (and
+    (instance ?WN (NetworkCommunicationFn BluetoothNetwork))
+    (instance ?R RadiatingElectromagnetic)
+    (subProcess ?R ?WN)
+    (carrierFrequency ?R ?W))
+  (and
+    (greaterThan ?W (GigaFn (MeasureFn Hertz 2.4)))
+    (lessThan ?W (GigaFn (MeasureFn Hertz 2.485)))))
+
+(subclass AdvancedAudioDistributionProfile BluetoothNetwork)
+(termFormat EnglishLanguage AdvancedAudioDistributionProfile "A2DP")
+(termFormat EnglishLanguage AdvancedAudioDistributionProfile "Advanced Audio Distribution Profile")
+(documentation AdvancedAudioDistributionProfile EnglishLanguage "This profile defines how multimedia audio
+can be streamed from one device to another over a Bluetooth connection (it is also called Bluetooth Audio
+Streaming). For example, music can be streamed from a mobile phone, to a wireless headset, hearing
+aid/cochlear implant streamer, car audio, or from a laptop/desktop to a wireless headset; also, voice can be
+streamed from a microphone device to a recorder on a PC.[1] The Audio/Video Remote Control Profile (AVRCP)
+is often used in conjunction with A2DP for remote control on devices such as headphones, car audio systems,
+or stand-alone speaker units. These systems often also implement Headset (HSP) or Hands-Free (HFP) profiles
+for telephone calls, which may be used separately. (from Wikipedia)")
+
+(documentation achievement EnglishLanguage "In video gaming parlance, an achievement, also sometimes known
+as a trophy, badge, award, stamp, medal, challenge or in game achievement, is a meta-goal defined outside
+a game's parameters. Unlike the in-game systems of quests, tasks, and/or levels that usually define the
+goals of a video game and have a direct effect on further gameplay, the management of achievements usually
+takes place outside the confines of the game environment and architecture.[1] Meeting the fulfillment
+conditions, and receiving recognition of fulfillment by the game, is referred to as unlocking the
+achievement. (from Wikipedia)")
+(instance achievement TernaryPredicate)
+(domain achievement 1 Game)
+(domain achievement 2 Agent)
+(domain achievement 3 Abstract)
+(termFormat EnglishLanguage achievement "achievement")
+(format EnglishLanguage achievement "%2 has achieved %3 in %1")
+
+(=>
+  (plays ?G ?A)
+  (desires ?A
+    (exists (?S)
+      (achievement ?G ?A ?S))))
+
+(instance referee CaseRole)
+(subrelation referee patient)
+(disjointRelation referee plays)
+
+(domain referee 1 Game)
+(domain referee 2 Agent)
+(documentation referee EnglishLanguage "The &%CaseRole of being a judge or coordinator of a game,
+as opposed to a player in the game.")
+
+(subrelation plays patient)
+(instance plays CaseRole)
+(domain plays 1 Game)
+(domain plays 2 Agent)
+(documentation plays EnglishLanguage "The &%CaseRole of being a player of a game, as opposed to a judge
+or other supporting role.")
+(termFormat EnglishLanguage plays "plays")
+(format EnglishLanguage plays "%2 plays %1")
+
+(=>
+  (plays ?G ?A)
+  (desires ?A
+    (and
+      (instance ?S Score)
+      (subProcess ?S ?G)
+      (agent ?S ?A))))
+
+(subclass ActiveSync ComputerProtocol)
+(documentation ActiveSync EnglishLanguage "ActiveSync is a mobile data synchronization app developed by
+Microsoft, originally released in 1996. It synchronizes data with handheld devices and desktop computers.
+In the Windows Task Manager, the associated process is called wcescomm.exe. (from Wikipedia)")
+(termFormat EnglishLanguage ActiveSync "ActiveSync")
+(creator ActiveSync MicrosoftCorporation)
+
+(subclass ComputerProtocol Procedure)
+(documentation ComputerProtocol EnglishLanguage "A set of specifications for the sequence and format
+of data sent between two (or more) &%ComputerPrograms to accomplish some task.")
+(termFormat EnglishLanguage ComputerProtocol "computer protocol")
+
+(=>
+  (instance ?CP ComputerProtocol)
+  (hasPurpose ?CP
+    (exists (?P1 ?P2 ?C)
+      (and
+        (instance ?P1 ComputerProgram)
+        (instance ?P2 ComputerProgram)
+        (instance ?C DataTransfer)
+        (origin ?C ?P1)
+        (destination ?C ?P2)
+        (represents ?CP ?C)))))
+
+(instance AirplaneMode DeviceStateAttribute)
+(documentation AirplaneMode EnglishLanguage "Airplane mode, Aeroplane mode, Flight mode, Offline mode,
+or Standalone mode is a setting available on smartphones and other portable computers that, when activated,
+suspends radio-frequency signal transmission by the device, thereby disabling Bluetooth, telephony, and
+Wi-Fi. GPS may or may not be disabled, because it does not involve transmitting radio waves. The name
+comes from the prohibition by most of the airlines of using equipment transmitting radio-frequency signal
+while in flight; using airplane mode prevents devices from transmitting. (from Wikipedia)")
+(termFormat EnglishLanguage AirplaneMode "Airplane mode")
+(termFormat EnglishLanguage AirplaneMode "Aeroplane mode")
+(termFormat EnglishLanguage AirplaneMode "Flight mode")
+(termFormat EnglishLanguage AirplaneMode "Offline mode")
+(termFormat EnglishLanguage AirplaneMode "Standalone mode")
+
+(=>
+  (holdsDuring ?T
+    (attribute ?C AirplaneMode))
+  (not
+    (holdsDuring ?T
+      (capability ?C origin (NetworkCommunicationFn WirelessNetwork)))))
+
+(subclass AirPlay WirelessNetwork)
+(documentation AirPlay EnglishLanguage "AirPlay is a proprietary protocol stack/suite developed by Apple
+Inc. that allows wireless streaming between devices of audio, video, device screens, and photos, together
+with related metadata. Originally implemented only in Apple's software and devices, it was called AirTunes
+and used for audio only. Apple has since licensed the AirPlay protocol stack as a third-party software
+component technology to manufacturers that build products compatible with Apple's devices. (from Wikipedia)")
+
+(termFormat EnglishLanguage AirPlay "AirPlay")
+(creator AirPlay AppleComputerCorporation)
+
+(=>
+  (instance ?NC (NetworkCommunicationFn AirPlay))
+  (or
+    (exists (?TV)
+      (and
+        (instance ?TV TelevisionSet)
+        (destination ?NC ?TV)))
+    (exists (?SP)
+      (and
+        (instance ?SP SpeakerDevice)
+        (destination ?NC ?SP)))))
+
+(subclass AirPrint ComputerNetwork)
+(documentation AirPrint EnglishLanguage "AirPrint is a feature in Apple Inc.'s macOS and iOS operating
+systems for printing via a wireless LAN (Wi-Fi), either directly to AirPrint-compatible printers,
+or to non-compatible shared printers by way of a computer running Microsoft Windows, Linux, or macOS.
+Direct Wi-Fi connection between the device and the printer is not supported by default, but has
+appeared as the 'HP ePrint Wireless Direct AirPrint' feature. (from Wikipedia)")
+
+(termFormat EnglishLanguage AirPrint "AirPrint")
+(creator AirPrint AppleComputerCorporation)
+
+(=>
+  (instance ?NC (NetworkCommunicationFn AirPrint))
+  (exists (?P)
+    (and
+      (instance ?P Printer)
+      (destination ?NC ?P))))
+
+;; Android (above)
+
+(subclass ApplicationProgrammerInterface ComputerProgram)
+(documentation ApplicationProgrammerInterface EnglishLanguage "A kind of &%ComputerProgram that is
+itself a portion of a larger &%ComputerProgram and is designed to be an interface to other code.
+It allows the functions of the program to be used without knowing every detail of its internal
+methods and data structures.")
+
+(=>
+  (instance ?API ApplicationProgrammerInterface)
+  (exists (?P)
+    (and
+      (instance ?P ComputerProgram)
+      (subProposition ?API ?P))))
+
+(termFormat EnglishLanguage ApplicationProgrammerInterface "API")
+(termFormat EnglishLanguage ApplicationProgrammerInterface "Application Programmer Interface")
+
+(subclass App ComputerProgram)
+(documentation App EnglishLanguage "A &%ComputerProgram that is designed to run on a
+&%MobileCellPhone.")
+
+(termFormat EnglishLanguage App "app")
+
+(=>
+  (instance ?A App)
+  (hasPurpose ?A
+    (exists (?A ?P)
+      (and
+        (instance ?C MobileCellPhone)
+        (instance ?P ComputerProcess)
+        (programRunning ?P ?A)
+        (computerRunning ?P ?C)))))
+
+(subclass AppleAppStore ComputerProgram)
+(creator AppleAppStore AppleComputer)
+(documentation AppleAppStore EnglishLanguage "The software and Internet site where Apple
+customers can download useful computer programs for their devices.  Some are free and others
+require payment.")
+
+(termFormat EnglishLanguage AppleAppStore "App store")
+(termFormat EnglishLanguage AppleAppStore "Apple app store")
+
+(=>
+  (and
+    (instance ?A AppleAppStore)
+    (programRunning ?P ?A)
+    (computerRunning ?P ?C))
+  (hasPurpose ?A
+    (exists (?D)
+      (and
+        (instance ?D Downloading)
+        (origin ?D ?C)))))
+
+(subclass AppleID UniqueIdentifier)
+(termFormat EnglishLanguage AppleID "Apple ID")
+
+(subclass AppleStore RetailBuilding)
+(termFormat EnglishLanguage AppleStore "Apple Store")
+(documentation AppleStore EnglishLanguage "A retail store where &%AppleComputer sells its products")
+
+(=>
+  (instance ?A AppleStore)
+  (operator AppleComputer ?A))
+
+(subclass AppleTV TelevisionReceiver)
+(termFormat EnglishLanguage AppleTV "Apple TV")
+(documentation AppleTV EnglishLanguage "Apple TV is a digital media player and microconsole developed
+and sold by Apple Inc. It is a small network appliance and entertainment device that can receive
+digital data such as music, video, or the screen display from an Mac or iOS device from specific
+sources and stream it to a television set or other video display. (from Wikipedia)")
+
+(instance ATandTCorp Corporation)
+(documentation ATandTCorp EnglishLanguage "AT&T Inc. is an American multinational conglomerate holding
+company headquartered at Whitacre Tower in Downtown Dallas, Texas. It is the world's largest
+telecommunications company, the largest provider of mobile telephone services, and the largest
+provider of fixed telephone services in the United States through AT&T Communications. Since
+June 14, 2018, it is also the parent company of mass media conglomerate WarnerMedia, making it
+the world's largest media and entertainment company in terms of revenue. As of 2018, AT&T is
+ranked #9 on the Fortune 500 rankings of the largest United States corporations by total
+revenue. (from Wikipedia)")
+
+(documentation AVCTP EnglishLanguage "The Audio/Video Control Transport Protocol (AVCTP) is used
+by the remote control profile to transfer AV/C commands over an L2CAP channel. The music control
+buttons on a stereo headset use this protocol to control the music player.")
+(subclass AVCTP ComputerProgram)
+(termFormat EnglishLanguage AVCTP "AVCTP")
+(termFormat EnglishLanguage AVCTP "Audio/Video Control Transport Protocol")
+
+(subclass BannerNotification GUIElement)
+(documentation BannerNotification EnglishLanguage "Banners are displayed for a short period of
+time in the upper right corner of the Mac's screen, and then slide off to the right. The icon
+of the application is displayed on the left side of the banner, while the message from the
+application will be displayed on the right side. (from Wikipedia)")
+(termFormat EnglishLanguage BannerNotification "banner notification")
+(termFormat EnglishLanguage BannerNotification "banner")
+
+(subclass Firmware ComputerProgram)
+(documentation Firmware EnglishLanguage "In computing, firmware is a specific class of computer
+software that provides the low-level control for the device's specific hardware. Firmware can
+either provide a standardized operating environment for the device's more complex software
+(allowing more hardware-independence), or, for less complex devices, act as the device's complete
+operating system, performing all control, monitoring and data manipulation functions. Typical
+examples of devices containing firmware are embedded systems, consumer appliances, computers,
+computer peripherals, and others. Almost all electronic devices beyond the simplest contain
+some firmware. Firmware is held in non-volatile memory devices such as ROM, EPROM, or flash
+memory. (from Wikipedia)")
+(termFormat EnglishLanguage Firmware "firmware")
+
+(subclass BasebandForIPhone Firmware)
+(=>
+  (and
+    (instance ?B BasebandForIPhone)
+    (instance ?I AppleIPhone))
+  (runsOn ?B ?I))
+
+(documentation BasebandForIPhone EnglishLanguage "The Firmware for the &%AppleIPhone.")
+(termFormat EnglishLanguage BasebandForIPhone "baseband")
+
+; Blog - in ComputerInput.kif
+
+(documentation Bookmarklet EnglishLanguage "A bookmarklet is a bookmark stored in a web
+browser that contains JavaScript commands that add new features to the browser. Bookmarklets
+are unobtrusive JavaScripts stored as the URL of a bookmark in a web browser or as a hyperlink
+on a web page. (from Wikipedia)")
+(subclass Bookmarklet ComputerProgram)
+(termFormat EnglishLanguage Bookmarklet "bookmarklet")
+
+(subclass CalendarText Text)
+(documentation CalendarText EnglishLanguage "A &%representation of one or more &%Days in a
+tabular form.  It generally has groupings by week, month or year.")
+(=>
+  (instance ?C CalendarText)
+  (exists (?D)
+    (and
+      (instance ?D Day)
+      (refers ?C ?D))))
+
+(termFormat EnglishLanguage CalendarText "calendar")
+
+(subclass CalendaringProgram ComputerProgram)
+(documentation CalendaringProgram EnglishLanguage "A &%ComputerProgram that allows users to
+render calendars and usually manage events and appointments.")
+(termFormat EnglishLanguage CalendaringProgram "calendar")
+(=>
+  (instance ?C CalendaringProgram)
+  (hasPurpose ?C
+    (exists (?T ?R ?P)
+      (and
+        (instance ?T CalendarText)
+        (programRunning ?P ?C)
+        (result ?P ?T)))))
+
+(subclass CameraProgram ComputerProgram)
+(documentation CameraProgram EnglishLanguage "A &%ComputerProgram that allows users to
+manipulate images and/or videos.")
+(termFormat EnglishLanguage CameraProgram "camera")
+(=>
+  (instance ?C CameraProgram)
+  (hasPurpose ?C
+    (exists (?I ?P)
+      (and
+        (instance ?I Image)
+        (programRunning ?P ?C)
+        (patient ?P ?I)))))
+
+;; Telecommunications - naics.kif
+(termFormat EnglishLanguage Telecommunications "carrier")
+
+(documentation ConsumerElectronicsShow EnglishLanguage "CES (formerly an acronym for
+Consumer Electronics Show) is an annual trade show organized by the Consumer Technology
+Association (CTA). Held in January at the Las Vegas Convention Center in Las Vegas,
+Nevada, United States, the event typically hosts presentations of new products and
+technologies in the consumer electronics industry. (from Wikipedia)")
+(subclass TradeShow FormalMeeting)
+(subclass ConsumerElectronicsShow TradeShow)
+
+(=>
+  (instance ?CES ConsumerElectronicsShow)
+  (located ?CES Countries-USA-provinces-Nevada-cities-LasVegas))  ;; term from mondial.kif
+
+(=>
+  (instance ?CES ConsumerElectronicsShow)
+  (exists (?J)
+    (and
+      (instance ?J January)
+      (during ?CES ?J))))
+
+(subclass CocoaTouch ApplicationProgrammerInterface)
+(documentation CocoaTouch EnglishLanguage "Cocoa Touch is a UI framework for building
+software programs to run on iOS for the iPhone, iPod Touch, and iPad, watchOS for the
+Apple Watch, and tvOS for the fourth-generation Apple TV, from Apple Inc. Cocoa Touch
+provides an abstraction layer of iOS, the operating system for the iPhone, iPod Touch,
+and iPad. Cocoa Touch is based on the macOS Cocoa API toolset and, like it, is
+primarily written in the Objective-C language. Cocoa Touch allows the use of hardware
+and features that are not found in macOS computers and are thus unique to the iOS range
+of devices. Just like Cocoa, Cocoa Touch follows a Model-View-Controller (MVC) software
+architecture. Cocoa Touch contains a different set of graphical control elements from
+Cocoa. Tools for developing applications based on Cocoa Touch are included in the iOS
+SDK. (from Wikipedia)")
+(termFormat EnglishLanguage CocoaTouch "Cocoa Touch")
+(creator CocoaTouch AppleComputerCorporation)
+
+(instance TimCookOfApple Human)
+(termFormat EnglishLanguage TimCookOfApple "Tim Cook")
+(holdsDuring (YearFn 2002) (coworker SteveJobsOfApple TimCookOfApple))
+
+(instance SteveJobsOfApple Human)
+(termFormat EnglishLanguage SteveJobsOfApple "Steve Jobs")
+(holdsDuring (YearFn 1976) (coworker SteveJobsOfApple SteveWozniakOfApple))
+
+(instance SteveWozniakOfApple Human)
+(termFormat EnglishLanguage SteveWozniakOfApple "Steve Wozniak")
+
+(subclass CascadingStylesheets MarkupLanguage)
+(termFormat EnglishLanguage CascadingStylesheets "CSS")
+(termFormat EnglishLanguage CascadingStylesheets "Cascading Stylesheets")
+
+(documentation CydiaPackageManager EnglishLanguage "Cydia is a package manager mobile app
+for iOS that enables a user to find and install software not authorized by &%AppleComputer on
+jailbroken iPhones, iPads and iPod touch devices. It also refers to digital distribution
+platform for software on iOS accessed through Cydia software. Many of the software
+packages available through Cydia are free of charge, although some require purchasing.
+(from Wikipedia)")
+(subclass CydiaPackageManager App)
+(termFormat EnglishLanguage CydiaPackageManager "Cydia")
+
+(instance DeviceFirmwareUpdateMode ComputerStatus)
+(documentation DeviceFirmwareUpdateMode EnglishLanguage "A complex series of keypresses
+allows an &%AppleComputer to enter a mode where its &%Firmware can be updated.")
+(termFormat EnglishLanguage DeviceFirmwareUpdateMode "Device Firmware Update Mode")
+(termFormat EnglishLanguage DeviceFirmwareUpdateMode "DFU Mode")
+
+(=>
+  (attribute ?C DeviceFirmwareUpdateMode)
+  (instance ?C AppleComputer))
+
+(subclass GUIDock GUIElement)
+(documentation GUIDock EnglishLanguage "A &%GUIElement of persistent &%Icons along one
+side of the screen.")
+(termFormat EnglishLanguage GUIDock "dock")
+
+(=>
+  (instance ?G GUIDock)
+  (exists (?I ?P ?CP)
+    (and
+      (instance ?CP ComputerProgram)
+      (programRunning ?P ?CP)
+      (instance ?I Icon)
+      (represents ?I ?P)
+      (orientation ?I ?G Inside))))
+

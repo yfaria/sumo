@@ -13,27 +13,27 @@
 ;; New York, NY 10016-5997, USA
 ;; All rights reserved.
           
-;; 1. COPYRIGHT                                                                                                                                                                                                                                                      
+;; 1. COPYRIGHT
 ;; The Institute of Electrical and Electronics Engineers, Inc., ("IEEE") owns the         
 ;; copyright to this Document in all forms of media. Copyright in the text retrieved,     
 ;; displayed or output from this Document is owned by IEEE and is protected by the        
 ;; copyright laws of the United States and by international treaties. The IEEE reserves   
-;; all rights not expressly granted herein.                                               
-                                                                                                                                                                                
-;; 2. ROYALTIES                                                                                                                                                                                                                                                     
+;; all rights not expressly granted herein.
+
+;; 2. ROYALTIES
 ;; The IEEE is providing the Document at no charge. However, the Document is not to be    
 ;; considered "Public Domain," as the IEEE is, and at all times shall remain, the sole    
 ;; copyright holder in the Document. The IEEE intends to revise the Document from time to 
-;; time; the latest version shall be available at http://standards.ieee.org/catalog/      
-                                                                                                                                                                              
-;; 3. TERMS OF USE                                                                                                                                                                                                                                                        
+;; time; the latest version shall be available at http://standards.ieee.org/catalog/
+
+;; 3. TERMS OF USE
 ;; The IEEE hereby grants Licensee a perpetual, non-exclusive, royalty-free, world-wide   
 ;; right and license to copy, publish and distribute the Document in any way, and to      
 ;; prepare derivative works that are based on or incorporate all or part of the Document  
 ;; provided that the IEEE is appropriately acknowledged as the source and copyright owner 
-;; in each and every use.                                                                                                                                                         
-                                                                                       
-;; 4. LIMITED WARRANTIES & LIMITATIONS OF REMEDIES                                                                                                                                                                                                                        
+;; in each and every use.
+
+;; 4. LIMITED WARRANTIES & LIMITATIONS OF REMEDIES
 ;; LICENSOR Does not warrant or represent the accuracy or content of the document and     
 ;; Expressly Disclaims any Express or Implied Warranty, including any Implied Warranty of 
 ;; Merchantability or Fitness for a Specific Purpose or that the use of the document is   
@@ -159,9 +159,11 @@ is a &%subclass of ?CLASS2, i.e. every &%instance of ?CLASS1 is also an &%instan
     (instance ?Z ?X))
   (instance ?Z ?Y))
 
-(subrelation immediateSubclass subclass)
+; (subrelation immediateSubclass subclass)
 (instance immediateSubclass AsymmetricRelation)
 (instance immediateSubclass IntransitiveRelation)
+(domain immediateSubclass 1 SetOrClass)
+(domain immediateSubclass 2 SetOrClass)
 (documentation immediateSubclass EnglishLanguage "A &%SetOrClass ?CLASS1 is an
 &%immediateSubclass of another &%SetOrClass ?CLASS2 just in case ?CLASS1 is a subclass of
 ?CLASS2 and there is no other subclass of ?CLASS2 such that ?CLASS1 is also a subclass of
@@ -579,6 +581,18 @@ the class &%PhysicalState, viz. &%Solid, &%Fluid, &%Liquid, &%Gas and &%Plasma."
                  (ListOrderFn
                    (ListFn @ROW) ?NUMBER)))))))))
 
+(=>
+   (exhaustiveAttribute ?CLASS @ROW)
+   (=>
+      (equal ?ATTR1
+        (ListOrderFn (ListFn @ROW) ?N1))
+      (not
+        (exists (?ATTR2 ?N2)
+            (and
+              (equal ?ATTR1 ?ATTR2)
+              (not
+                 (equal ?N1 ?N2)))))))
+
 (instance exhaustiveDecomposition Predicate)
 (instance exhaustiveDecomposition VariableArityRelation)
 (domain exhaustiveDecomposition 1 Class)
@@ -658,6 +672,7 @@ in the SUMO, and the name of the other knowledge source.")
 外部知识来源、 SUMO概念和它外部知识来源的名字。")
 
 (subrelation synonymousExternalConcept relatedExternalConcept)
+(instance synonymousExternalConcept TernaryPredicate)
 (disjointRelation synonymousExternalConcept subsumedExternalConcept)
 (disjointRelation synonymousExternalConcept subsumingExternalConcept)
 (disjointRelation subsumedExternalConcept subsumingExternalConcept)
@@ -669,6 +684,7 @@ same meaning as ?STRING in ?LANGUAGE.")
 的。")
 
 (subrelation subsumingExternalConcept relatedExternalConcept)
+(instance subsumingExternalConcept TernaryPredicate)
 (documentation subsumingExternalConcept EnglishLanguage "(&%subsumingExternalConcept
 ?STRING ?THING ?LANGUAGE) means that the SUMO concept ?THING subsumes
 the meaning of ?STRING in ?LANGUAGE, i.e. the concept ?THING is broader
@@ -678,6 +694,7 @@ in meaning than ?STRING.")
 也就是说概念 ?THING 的含义比 ?STRING 要广。")
 
 (subrelation subsumedExternalConcept relatedExternalConcept)
+(instance subsumedExternalConcept TernaryPredicate)
 (documentation subsumedExternalConcept EnglishLanguage "(&%subsumedExternalConcept
 ?STRING ?THING ?LANGUAGE) means that the SUMO concept ?THING is subsumed
 by the meaning of ?STRING in ?LANGUAGE, i.e. the concept ?THING is narrower
@@ -976,6 +993,7 @@ of the &%Object ?WHOLE.  Note that, since &%part is a
         (part ?OBJ2 ?OBJ1))))
 
 (subrelation piece part)
+(instance piece BinaryPredicate)
 (domain piece 1 Substance)
 (domain piece 2 Substance)
 (documentation piece EnglishLanguage "A specialized common sense notion of part for
@@ -992,6 +1010,7 @@ etc.  Compare &%component, another subrelation of &%part.")
          (instance ?SUBSTANCE2 ?CLASS))))
 
 (subrelation component part)
+(instance component BinaryPredicate)
 (domain component 1 CorpuscularObject)
 (domain component 2 CorpuscularObject)
 (documentation component EnglishLanguage "A specialized common sense notion of part
@@ -1016,7 +1035,10 @@ For example, plastic is a &%material of my computer monitor.  Compare
 ?OBJECT 是由 ?SUBSTANCE 作为部件所构成的。 这个关系包括 「组成」、「做成」和「形成」等概念。例子有
 塑料是我电算计屏幕的一种 &%material。可参考比较 &%part 和它的子关系，即 &%component 和 &%piece。")
 
-(subrelation contains partlyLocated)
+(=>
+  (contains ?SMALL ?BIG)
+  (partlyLocated ?SMALL ?BIG))
+
 (instance contains SpatialRelation)
 (instance contains AsymmetricRelation)
 (instance contains PartialValuedRelation)
@@ -1285,7 +1307,7 @@ of sheep.")
   (exists (?OBJ)
     (member ?OBJ ?COLL)))
 
-(subrelation member part)
+; (subrelation member part)
 (instance member AsymmetricRelation)
 (instance member IntransitiveRelation)
 (domain member 1 Object)
@@ -1396,6 +1418,7 @@ roadway signs, representational art works, photographs, etc.")
 这不属于 &%Language 的部分，并且和 &%Object 所代表有相似的地方 这 &%Class 可包括具有象征性的路标、具
 代表性的艺术品、照片等。")
 
+(subclass MotionPicture Recording)
 (subclass MotionPicture Text)
 (documentation MotionPicture EnglishLanguage "A &%ContentBearingObject which depicts
 motion (and which may have an audio or text component as well).  This &%Class covers
@@ -1707,15 +1730,20 @@ place and time without some physical encoding or embodiment.")
 和地点。")
 
 ;; Something is Abstract just in case it has neither a spatial nor temporal
-;; location.
+;; location.  the disjointness declaration above handles the axioms below,
+;; which otherwise cause a type violation
 
-(=>
-   (instance ?ABS Abstract)
-   (not
-      (exists (?POINT)
-         (or
-            (located ?ABS ?POINT)
-            (time ?ABS ?POINT)))))
+; (=>
+;   (instance ?ABS Abstract)
+;   (not
+;      (exists (?POINT)
+;        (located ?ABS ?POINT))))
+
+;(=>
+;   (instance ?ABS Abstract)
+;   (not
+;      (exists (?POINT)
+;        (time ?ABS ?POINT))))
 
 (subclass Quantity Abstract)
 (documentation Quantity EnglishLanguage "Any specification of how many or how much of
@@ -1943,12 +1971,12 @@ multiplying a &%RealNumber by the square root of -1.")
 (documentation ImaginaryNumber ChineseLanguage "这是将一个 &%RealNumber 乘以-1的平方根的积，它
 可以是任何一个的 &%Number。")
 
-(=>
-   (instance ?NUMBER ImaginaryNumber)
-   (exists (?REAL)
-      (and
-         (instance ?REAL RealNumber)
-         (equal ?NUMBER (MultiplicationFn ?REAL (SquareRootFn -1))))))
+;(=>
+;   (instance ?NUMBER ImaginaryNumber)
+;   (exists (?REAL)
+;      (and
+;         (instance ?REAL RealNumber)
+;         (equal ?NUMBER (MultiplicationFn ?REAL (SquareRootFn -1))))))
 
 (subclass RationalNumber RealNumber)
 (documentation RationalNumber EnglishLanguage "Any &%RealNumber that is the product of
@@ -2057,16 +2085,16 @@ x and y are &%RealNumbers and i is the square root of -1.")
 (documentation ComplexNumber ChineseLanguage "这是一个有来自x + yi形式的&%Number，x和y是
 &%RealNumber，i是-1的平方根。")
 
-(=>
-   (instance ?NUMBER ComplexNumber)
-   (exists (?REAL1 ?REAL2)
-      (and
-         (instance ?REAL1 RealNumber)
-         (instance ?REAL2 RealNumber)
-         (equal ?NUMBER
-           (AdditionFn ?REAL1
-             (MultiplicationFn ?REAL2
-               (SquareRootFn -1)))))))
+;(=>
+;   (instance ?NUMBER ComplexNumber)
+;   (exists (?REAL1 ?REAL2)
+;      (and
+;         (instance ?REAL1 RealNumber)
+;         (instance ?REAL2 RealNumber)
+;         (equal ?NUMBER
+;           (AdditionFn ?REAL1
+;             (MultiplicationFn ?REAL2
+;               (SquareRootFn -1)))))))
 
 (subclass PhysicalQuantity Quantity)
 (partition PhysicalQuantity ConstantQuantity FunctionQuantity)
@@ -2890,20 +2918,20 @@ avoiding or promoting ?ENTITY.")
 正面或负面的，也就是说 ?AGENT 可以是有意图要避开或是推荐 ?ENTITY。")
 
 (=>
-   (and
-         (instance ?PROCESS IntentionalProcess)
-         (agent ?PROCESS ?AGENT)
-         (instance ?AGENT CognitiveAgent)
-         (patient ?PROCESS ?OBJECT))
-   (inScopeOfInterest ?AGENT ?OBJECT))
+  (and
+    (instance ?PROCESS IntentionalProcess)
+    (agent ?PROCESS ?AGENT)
+    (instance ?AGENT CognitiveAgent)
+    (patient ?PROCESS ?OBJECT))
+  (inScopeOfInterest ?AGENT ?OBJECT))
    
 (=>
-    (inScopeOfInterest ?AGENT ?OBJECT)
-    (exists (?PROCESS ?OBJECT)
-        (and
-            (instance ?PROCESS IntentionalProcess)
-            (agent ?PROCESS ?AGENT)
-            (patient ?PROCESS ?OBJECT))))
+  (inScopeOfInterest ?AGENT ?OBJECT)
+  (exists (?PROCESS)
+    (and
+      (instance ?PROCESS IntentionalProcess)
+      (agent ?PROCESS ?AGENT)
+      (patient ?PROCESS ?OBJECT))))
 
 (instance needs ObjectAttitude)
 (instance needs BinaryPredicate)
@@ -2916,8 +2944,8 @@ physically required for the continued existence of ?AGENT.")
 需要 ?OBJECT。")
 
 (=>
-    (needs ?AGENT ?OBJECT)
-    (wants ?AGENT ?OBJECT))
+  (needs ?AGENT ?OBJECT)
+  (wants ?AGENT ?OBJECT))
 
 (instance wants ObjectAttitude)
 (instance wants BinaryPredicate)
@@ -2932,9 +2960,9 @@ no implication that what is wanted by an agent is not already possessed by the a
 也就是说 ?AGENT 相信 ?OBJECT 会满足它其中一个的意愿。 注：这并不意味着施事体没有它所想要的东西。")
 
 (=>
-   (wants ?AGENT ?OBJ)
-   (exists (?PURP)
-      (hasPurposeForAgent ?OBJ ?PURP ?AGENT)))
+  (wants ?AGENT ?OBJ)
+  (exists (?PURP)
+    (hasPurposeForAgent ?OBJ ?PURP ?AGENT)))
 
 (=>
   (and
@@ -3133,7 +3161,7 @@ returns the &%List containing those arguments in exactly the same order.")
                (equal ?ITEM1 ?ITEM2)))
          (disjoint ?ITEM1 ?ITEM2))))
 
-(<=>
+(=>
   (disjointDecomposition ?CLASS ?ROW1 ?ROW2 ?ROW3)
   (and
     (disjoint ?ROW1 ?ROW2)
@@ -3865,13 +3893,17 @@ imply temporal ordering.")
 (domain causes 1 Process)
 (domain causes 2 Process)
 (relatedInternalConcept causes causesSubclass)
-(subrelation causes relatedEvent)
+; (subrelation causes relatedEvent)
 (documentation causes EnglishLanguage "The causation relation between instances of 
 &%Process.(&%causes ?PROCESS1 ?PROCESS2) means that the instance of &%Process ?PROCESS1
 brings about the instance of &%Process ?PROCESS2.")
 (documentation causes ChineseLanguage "这是 &%Process 实例之间的因果关系，
 (&%causes ?PROCESS1 ?PROCESS2)的意思是 &%Process ?PROCESS1 的实例引起 &%Process ?PROCESS2 的
 实例。")
+
+(=>
+  (causes ?P1 ?P2)
+  (relatedEvent ?P1 ?P2))
 
 (=>
    (instance ?PROC1 Process)
@@ -4182,7 +4214,11 @@ an immediate &%subrelation of &%located.")
 
 (instance eventPartlyLocated CaseRole)
 (instance eventPartlyLocated PartialValuedRelation)
-(subrelation eventPartlyLocated partlyLocated)
+
+(=>
+  (eventPartlyLocated ?PROC ?OJB)
+  (partlyLocated ?PROC ?OJB))
+
 (domain eventPartlyLocated 1 Process)
 (domain eventPartlyLocated 2 Object)
 (documentation eventPartlyLocated EnglishLanguage "(&%eventPartlyLocated ?PROC ?OBJ)
@@ -4226,6 +4262,7 @@ of ?PROC is located on ?OBJ")
       (eventLocated ?SUB ?OBJ))))
 
 (subrelation exactlyLocated located)
+(instance exactlyLocated BinaryPredicate)
 (documentation exactlyLocated EnglishLanguage "The actual, minimal location of an
 Object.  This is a subrelation of the more general &%Predicate
 &%located.")
@@ -4512,6 +4549,7 @@ etc.")
 加利福尼亚的天气、全球变暖的前景、替代能源的选择和各家石油公司股票的价格，等等。")
 
 (subrelation names refers)
+(instance names BinaryPredicate)
 (domain names 1 SymbolicString)
 (documentation names EnglishLanguage "(&%names ?STRING ?ENTITY) means that the thing 
 ?ENTITY
@@ -4536,6 +4574,7 @@ Number).")
 类别，&%uniqueIdentifier 的一些例子包括数据库应用程序数据库表的索引，和ISBN(国际标准书号)。")
 
 (subrelation represents refers)
+(instance represents BinaryPredicate)
 (documentation represents EnglishLanguage "A very general semiotics &%Predicate.
 (&%represents ?THING ?ENTITY) means that ?THING in some way indicates,
 expresses, connotes, pictures, describes, etc. ?ENTITY.  The &%Predicates
@@ -4642,7 +4681,6 @@ not just for a single instance.")
           (instance ?OBJ1 ?CLASS1)
           (containsInformation ?OBJ1 ?INFO))))))
 
-(subrelation equivalentContentInstance subsumesContentInstance)
 (instance equivalentContentInstance EquivalenceRelation)
 (domain equivalentContentInstance 1 ContentBearingPhysical)
 (domain equivalentContentInstance 2 ContentBearingPhysical)
@@ -4801,7 +4839,7 @@ as its corresponding axiom indicates, is a composition of the &%CaseRoles
 (instance MultiplicationFn BinaryFunction)
 (instance MultiplicationFn AssociativeFunction)
 (instance MultiplicationFn CommutativeFunction)
-(instance MultiplicationFn RelationExtendedToQuantities)
+;(instance MultiplicationFn RelationExtendedToQuantities)
 (instance MultiplicationFn TotalValuedRelation)
 (domain MultiplicationFn 1 Quantity)
 (domain MultiplicationFn 2 Quantity)
@@ -4815,7 +4853,7 @@ of these numbers.")
 (instance AdditionFn BinaryFunction)
 (instance AdditionFn AssociativeFunction)
 (instance AdditionFn CommutativeFunction)
-(instance AdditionFn RelationExtendedToQuantities)
+; (instance AdditionFn RelationExtendedToQuantities)
 (instance AdditionFn TotalValuedRelation)
 (domain AdditionFn 1 Quantity)
 (domain AdditionFn 2 Quantity)
@@ -4831,7 +4869,7 @@ numbers.")
 
 (instance SubtractionFn BinaryFunction)
 (instance SubtractionFn AssociativeFunction)
-(instance SubtractionFn RelationExtendedToQuantities)
+;(instance SubtractionFn RelationExtendedToQuantities)
 (instance SubtractionFn TotalValuedRelation)
 (domain SubtractionFn 1 Quantity)
 (domain SubtractionFn 2 Quantity)
@@ -4851,7 +4889,7 @@ exception occurs when ?NUMBER1 is equal to 0, in which case
 
 (instance DivisionFn BinaryFunction)
 (instance DivisionFn AssociativeFunction)
-(instance DivisionFn RelationExtendedToQuantities)
+;(instance DivisionFn RelationExtendedToQuantities)
 (instance DivisionFn PartialValuedRelation)
 (domain DivisionFn 1 Quantity)
 (domain DivisionFn 2 Quantity)
@@ -4866,13 +4904,13 @@ is the reciprocal of ?NUMBER2.  Note too that (&%DivisionFn ?NUMBER1
 (&%DivisionFn ?NUMBER1 ?NUMBER2)就是 ?NUMBER2 的倒数。也要注意的是当 ?NUMBER2 = 0 时，
 (&%DivisionFn ?NUMBER1?NUMBER2) 会是为定义。")
 
-(=>
-   (instance ?NUMBER RationalNumber)
-   (exists (?INT1 ?INT2)
-      (and
-         (instance ?INT1 Integer)
-         (instance ?INT2 Integer)
-         (equal ?NUMBER (DivisionFn ?INT1 ?INT2)))))
+;(=>
+;   (instance ?NUMBER RationalNumber)
+;   (exists (?INT1 ?INT2)
+;      (and
+;         (instance ?INT1 Integer)
+;         (instance ?INT2 Integer)
+;         (equal ?NUMBER (DivisionFn ?INT1 ?INT2)))))
 
 (instance AbsoluteValueFn UnaryFunction)
 (instance AbsoluteValueFn TotalValuedRelation)
@@ -4905,14 +4943,15 @@ is the absolute value of the &%RealNumber ?NUMBER.")
 (documentation CeilingFn ChineseLanguage "(&%CeilingFn ?NUMBER)得出大于或等于 &%RealNumber
 ?NUMBER 的最小 &%Integer。")
 
-(=>
-   (equal (CeilingFn ?NUMBER) ?INT)
-   (not
-      (exists (?OTHERINT)
-         (and
-            (instance ?OTHERINT Integer)
-            (greaterThanOrEqualTo ?OTHERINT ?NUMBER)
-            (lessThan ?OTHERINT ?INT)))))
+; not expressible in TFF or TPTP
+; (=>
+;   (equal (CeilingFn ?NUMBER) ?INT)
+;   (not
+;      (exists (?OTHERINT)
+;         (and
+;            (instance ?OTHERINT Integer)
+;            (greaterThanOrEqualTo ?OTHERINT ?NUMBER)
+;            (lessThan ?OTHERINT ?INT)))))
 
 (instance CosineFn UnaryFunction)
 (instance CosineFn TotalValuedRelation)
@@ -4934,11 +4973,11 @@ denominator of the canonical reduced form of the &%RealNumber ?NUMBER.")
 ?NUMBER 还原规范形式的分母。")
 
 (instance ExponentiationFn BinaryFunction)
-(instance ExponentiationFn RelationExtendedToQuantities)
+;(instance ExponentiationFn RelationExtendedToQuantities)
 (instance ExponentiationFn TotalValuedRelation)
-(domain ExponentiationFn 1 Quantity)
+(domain ExponentiationFn 1 RealNumber)
 (domain ExponentiationFn 2 Integer)
-(range ExponentiationFn Quantity)
+(range ExponentiationFn RealNumber)
 (documentation ExponentiationFn EnglishLanguage "(&%ExponentiationFn ?NUMBER ?INT) returns
 the &%RealNumber ?NUMBER raised to the power of the &%Integer ?INT.")
 (documentation ExponentiationFn ChineseLanguage "(&%ExponentiationFn ?NUMBER ?INT)交出
@@ -4953,20 +4992,21 @@ less than or equal to the &%RealNumber ?NUMBER.")
 (documentation FloorFn ChineseLanguage "(&%FloorFn ?NUMBER) 得出小于或等于 &%RealNumber 
 ?NUMBER 的最大 &%Integer。")
 
-(=>
-   (equal (FloorFn ?NUMBER) ?INT)
-   (not
-      (exists (?OTHERINT)
-         (and
-            (instance ?OTHERINT Integer)
-            (lessThanOrEqualTo ?OTHERINT ?NUMBER)
-            (greaterThan ?OTHERINT ?INT)))))
+; not expressible in TFF or TPTP
+;(=>
+;   (equal (FloorFn ?NUMBER) ?INT)
+;   (not
+;      (exists (?OTHERINT)
+;         (and
+;            (instance ?OTHERINT Integer)
+;            (lessThanOrEqualTo ?OTHERINT ?NUMBER)
+;            (greaterThan ?OTHERINT ?INT)))))
 
 (instance GreatestCommonDivisorFn Function)
 (instance GreatestCommonDivisorFn VariableArityRelation)
 (instance GreatestCommonDivisorFn PartialValuedRelation)
 (range GreatestCommonDivisorFn Integer)
-(domain GreatestCommonDivisorFn 1 Number)
+(domain GreatestCommonDivisorFn 1 Integer)
 (documentation GreatestCommonDivisorFn EnglishLanguage "(&%GreatestCommonDivisorFn
 ?NUMBER1 ?NUMBER2 ... ?NUMBER) returns the greatest common divisor of
 ?NUMBER1 through ?NUMBER.")
@@ -4974,11 +5014,11 @@ less than or equal to the &%RealNumber ?NUMBER.")
 ?NUMBER1 ?NUMBER2 ... ?NUMBER)得出 ?NUMBER1 到 ?NUMBER 的最大公约数。")
 
 (=>
-    (GreatestCommonDivisorFn @ROW)
-    (=>
-        (inList ?ELEMENT
-            (ListFn @ROW))
-        (instance ?ELEMENT Number)))
+  (equal (GreatestCommonDivisorFn @ROW) ?NUMBER)
+  (=>
+    (inList ?ELEMENT
+      (ListFn @ROW))
+    (instance ?ELEMENT Number)))
 
 (=>
    (equal (GreatestCommonDivisorFn @ROW) ?NUMBER)
@@ -5025,12 +5065,12 @@ the part of ?NUMBER that has the square root of -1 as its factor.")
 (documentation ImaginaryPartFn ChineseLanguage "(&%ImaginaryPartFn ?NUMBER) 得出 ?NUMBER 
 有它的因子为-1的平方根的部分。")
 
-(=>
-   (instance ?NUMBER ComplexNumber)
-   (exists (?PART1 ?PART2)
-      (and
-         (equal ?PART1 (RealNumberFn ?NUMBER))
-         (equal ?PART2 (ImaginaryPartFn ?NUMBER)))))
+;(=>
+;   (instance ?NUMBER ComplexNumber)
+;   (exists (?PART1 ?PART2)
+;      (and
+;         (equal ?PART1 (RealNumberFn ?NUMBER))
+;         (equal ?PART2 (ImaginaryPartFn ?NUMBER)))))
 
 (instance IntegerSquareRootFn UnaryFunction)
 (instance IntegerSquareRootFn PartialValuedRelation)
@@ -5045,7 +5085,7 @@ returns the integer square root of ?NUMBER.")
 (instance LeastCommonMultipleFn PartialValuedRelation)
 (instance LeastCommonMultipleFn VariableArityRelation)
 (range LeastCommonMultipleFn Integer)
-(domain LeastCommonMultipleFn 1 Number)
+(domain LeastCommonMultipleFn 1 Integer)
 (documentation LeastCommonMultipleFn EnglishLanguage "(&%LeastCommonMultipleFn
 ?NUMBER1 ?NUMBER2 ... ?NUMBER) returns the least common multiple of
 ?NUMBER1 through ?NUMBER.")
@@ -5053,7 +5093,7 @@ returns the integer square root of ?NUMBER.")
 ?NUMBER1 ?NUMBER2 ... ?NUMBER) 得出 ?NUMBER1 到 ?NUMBER 的最小公倍数。")
 
 (=>
-    (LeastCommonMultipleFn @ROW)
+   (equal (LeastCommonMultipleFn @ROW) ?NUMBER)
     (=>
         (inList ?ELEMENT
             (ListFn @ROW))
@@ -5089,7 +5129,7 @@ returns the integer square root of ?NUMBER.")
 (instance MaxFn BinaryFunction)
 (instance MaxFn AssociativeFunction)
 (instance MaxFn CommutativeFunction)
-(instance MaxFn RelationExtendedToQuantities)
+;(instance MaxFn RelationExtendedToQuantities)
 (instance MaxFn TotalValuedRelation)
 (domain MaxFn 1 Quantity)
 (domain MaxFn 2 Quantity)
@@ -5116,7 +5156,7 @@ returns the integer square root of ?NUMBER.")
 (instance MinFn BinaryFunction)
 (instance MinFn AssociativeFunction)
 (instance MinFn CommutativeFunction)
-(instance MinFn RelationExtendedToQuantities)
+;(instance MinFn RelationExtendedToQuantities)
 (instance MinFn TotalValuedRelation)
 (domain MinFn 1 Quantity)
 (domain MinFn 2 Quantity)
@@ -5179,10 +5219,10 @@ the rational representation of ?NUMBER.")
  &%RealNumber 部分。")
 
 (instance ReciprocalFn UnaryFunction)
-(instance ReciprocalFn RelationExtendedToQuantities)
+;(instance ReciprocalFn RelationExtendedToQuantities)
 (instance ReciprocalFn TotalValuedRelation)
-(domain ReciprocalFn 1 Quantity)
-(range ReciprocalFn Quantity)
+(domain ReciprocalFn 1 RealNumber)
+(range ReciprocalFn RealNumber)
 (documentation ReciprocalFn EnglishLanguage "(ReciprocalFn ?NUMBER) is the reciprocal
 element of ?NUMBER with respect to the multiplication operator
 (&%MultiplicationFn), i.e. 1/?NUMBER.  Not all numbers have a reciprocal
@@ -5196,19 +5236,22 @@ applying the &%ExponentiationFn function to the element to the power
 3*1/3 = 1。一个元素的倒数 &%equal 对那个元素以-1的次方，应用 &%ExponentiationFn 函数。")
 
 (=>
-   (instance ?NUMBER Quantity)
+   (instance ?NUMBER Integer)
    (equal (ReciprocalFn ?NUMBER) (ExponentiationFn ?NUMBER -1)))
 
 (=>
-   (instance ?NUMBER Quantity)
+   (and
+     (instance ?NUMBER Integer)
+     (not
+       (equal ?NUMBER 0)))
    (equal 1 (MultiplicationFn ?NUMBER (ReciprocalFn ?NUMBER))))
 
 (instance RemainderFn BinaryFunction)
-(instance RemainderFn RelationExtendedToQuantities)
+; (instance RemainderFn RelationExtendedToQuantities)
 (instance RemainderFn PartialValuedRelation)
-(domain RemainderFn 1 Quantity)
-(domain RemainderFn 2 Quantity)
-(range RemainderFn Quantity)
+(domain RemainderFn 1 Integer)
+(domain RemainderFn 2 Integer)
+(range RemainderFn Integer)
 (documentation RemainderFn EnglishLanguage "(RemainderFn ?NUMBER ?DIVISOR) is the
 remainder of the number ?NUMBER divided by the number ?DIVISOR.
 The result has the same sign as ?DIVISOR.")
@@ -5222,7 +5265,6 @@ The result has the same sign as ?DIVISOR.")
 (=>
    (equal (RemainderFn ?NUMBER1 ?NUMBER2) ?NUMBER)
    (equal (SignumFn ?NUMBER2) (SignumFn ?NUMBER)))
-
 
 (=>
   (instance ?NUMBER EvenInteger)
@@ -5242,7 +5284,7 @@ The result has the same sign as ?DIVISOR.")
             (equal ?NUMBER ?PRIME)))))
 
 (instance RoundFn UnaryFunction)
-(instance RoundFn RelationExtendedToQuantities)
+;(instance RoundFn RelationExtendedToQuantities)
 (instance RoundFn TotalValuedRelation)
 (domain RoundFn 1 Quantity)
 (range RoundFn Quantity)
@@ -5252,15 +5294,15 @@ to ?NUMBER on the number line.  If ?NUMBER is halfway between two
 (documentation RoundFn ChineseLanguage "(&%RoundFn ?NUMBER)是在数字线上最接近 ?NUMBER 的
  &%Integer，如果 ?NUMBER 位于两个 &%Integer 的一半(例如：3.5)时, 这将会得出较大的 &%Integer。")
 
-(=>
-   (equal (RoundFn ?NUMBER1) ?NUMBER2)
-   (or
-      (=>
-         (lessThan (SubtractionFn ?NUMBER1 (FloorFn ?NUMBER1)) 0.5)
-         (equal ?NUMBER2 (FloorFn ?NUMBER1)))
-      (=>
-         (greaterThanOrEqualTo (SubtractionFn ?NUMBER1 (FloorFn ?NUMBER1)) 0.5)
-         (equal ?NUMBER2 (CeilingFn ?NUMBER1)))))
+;(=>
+;   (equal (RoundFn ?NUMBER1) ?NUMBER2)
+;   (or
+;      (=>
+;         (lessThan (SubtractionFn ?NUMBER1 (FloorFn ?NUMBER1)) 0.5)
+;         (equal ?NUMBER2 (FloorFn ?NUMBER1)))
+;      (=>
+;         (greaterThanOrEqualTo (SubtractionFn ?NUMBER1 (FloorFn ?NUMBER1)) 0.5)
+;         (equal ?NUMBER2 (CeilingFn ?NUMBER1)))))
 
 (instance SignumFn UnaryFunction)
 (instance SignumFn TotalValuedRelation)
@@ -5297,7 +5339,7 @@ opposite ?DEGREE to the hypotenuse in a right-angled triangle.")
 
 (instance SquareRootFn UnaryFunction)
 (domain SquareRootFn 1 RealNumber)
-(range SquareRootFn Number)
+(range SquareRootFn RealNumber)
 (documentation SquareRootFn EnglishLanguage "(SquareRootFn ?NUMBER) is the principal
 square root of ?NUMBER.")
 (documentation SquareRootFn ChineseLanguage "(SquareRootFn ?NUMBER)是 ?NUMBER的主要平方根。")
@@ -5324,21 +5366,21 @@ triangle.")
 (instance identityElement BinaryPredicate)
 (instance identityElement AsymmetricRelation)
 (domain identityElement 1 BinaryFunction)
-(domain identityElement 2 Entity)
+(domain identityElement 2 Integer)
 (documentation identityElement EnglishLanguage "An object ?ID is the identity element
 for &%BinaryFunction ?FUNCTION just in case, for every instance ?INST,
 applying ?FUNCTION to ?INST and ?ID results in ?INST.")
 (documentation identityElement ChineseLanguage "一个物体的 ?ID 是 &%BinaryFunction ?FUNCTION
 的身份元素，以防?INST的每一个实例，应用 ?FUNCTION 到 ?INST 和 ?ID 会得出 ?INST。")
 
-(=>
-   (identityElement ?FUNCTION ?ID)
-   (forall (?INST)
-      (=>
-         (and
-            (domain ?FUNCTION 1 ?CLASS)
-            (instance ?INST ?CLASS))
-         (equal (AssignmentFn ?FUNCTION ?ID ?INST) ?INST))))
+;(=>
+;   (identityElement ?FUNCTION ?ID)
+;   (forall (?INST)
+;      (=>
+;         (and
+;            (domain ?FUNCTION 1 ?CLASS)
+;            (instance ?INST ?CLASS))
+;         (equal (AssignmentFn ?FUNCTION ?ID ?INST) ?INST))))
 
 (identityElement MultiplicationFn 1)
 (identityElement AdditionFn 0)
@@ -5362,14 +5404,14 @@ its successor, e.g. the successor of 5 is 6.")
    (instance ?INT Integer)
    (lessThan ?INT (SuccessorFn ?INT)))
 
-(=>
-   (and
-      (instance ?INT1 Integer)
-      (instance ?INT2 Integer))
-   (not
-      (and
-         (lessThan ?INT1 ?INT2)
-         (lessThan ?INT2 (SuccessorFn ?INT1)))))
+;(=>
+;   (and
+;      (instance ?INT1 Integer)
+;      (instance ?INT2 Integer))
+;   (not
+;      (and
+;         (lessThan ?INT1 ?INT2)
+;         (lessThan ?INT2 (SuccessorFn ?INT1)))))
 
 (=>
    (instance ?INT Integer)
@@ -5396,14 +5438,14 @@ its predecessor, e.g. the predecessor of 5 is 4.")
    (instance ?INT Integer)
    (greaterThan ?INT (PredecessorFn ?INT)))
 
-(=>
-   (and
-      (instance ?INT1 Integer)
-      (instance ?INT2 Integer))
-   (not
-      (and
-         (lessThan ?INT2 ?INT1)
-         (lessThan (PredecessorFn ?INT1) ?INT2))))
+;(=>
+;   (and
+;      (instance ?INT1 Integer)
+;      (instance ?INT2 Integer))
+;   (not
+;      (and
+;         (lessThan ?INT2 ?INT1)
+;         (lessThan (PredecessorFn ?INT1) ?INT2))))
 
 (instance average PartialValuedRelation)
 (instance average BinaryPredicate)
@@ -5444,6 +5486,7 @@ number of list elements.")
 ;; ontology (available on the Ontolingua server).
 
 (subrelation subset subclass)
+(instance subset BinaryPredicate)
 (domain subset 1 Set)
 (domain subset 2 Set)
 (documentation subset EnglishLanguage "(subset ?SET1 ?SET2) is true just in case the
@@ -5470,10 +5513,9 @@ of another &%Entity only if the latter is a &%Set.")
 了这个 ?ENTITY。一个 &%Entity 可以是另外一个 &%Entity 的 &%element 当且仅当后者是一个 &%Set。")
 
 (=>
-  (forall (?ELEMENT)
-    (<=>
-      (element ?ELEMENT ?SET1)
-      (element ?ELEMENT ?SET2)))
+  (<=>
+    (element ?ELEMENT ?SET1)
+    (element ?ELEMENT ?SET2))
   (equal ?SET1 ?SET2))
 
 (instance UnionFn BinaryFunction)
@@ -5572,7 +5614,7 @@ instances of the original &%SetOrClass.")
 (instance CardinalityFn TotalValuedRelation)
 (instance CardinalityFn AsymmetricRelation)
 (domain CardinalityFn 1 (UnionFn SetOrClass Collection))
-(range CardinalityFn Number)
+(range CardinalityFn Integer)
 (documentation CardinalityFn EnglishLanguage "(CardinalityFn ?CLASS) returns the
 number of instances in the &%SetOrClass ?CLASS or the number of
 members in the ?CLASS &%Collection.")
@@ -5697,7 +5739,7 @@ axiomatic support for it.")
 
 ;; INCLUDES 'NUMERIC FUNCTIONS'
 
-(subclass Graph Abstract)
+(subclass Graph Proposition)
 (documentation Graph EnglishLanguage "The &%Class of graphs, where a graph is understood
 to be a set of &%GraphNodes connected by &%GraphArcs.  Note that this
 &%Class includes only connected graphs, i.e. graphs in which there is a
@@ -5878,7 +5920,7 @@ is a &%Graph containing at least one &%GraphLoop.")
          (instance ?LOOP GraphLoop)
          (graphPart ?LOOP ?GRAPH))))
 
-(subclass GraphElement Abstract)
+(subclass GraphElement Proposition)
 (partition GraphElement GraphNode GraphArc)
 (documentation GraphElement EnglishLanguage "Noncompositional parts of &%Graphs.
 These parts are restricted to &%GraphNodes and &%GraphArcs.")
@@ -6151,8 +6193,8 @@ to the &%Class of &%GraphPaths between those two nodes.  Note that the two
       (graphPart ?PATH ?GRAPH)
       (not (instance ?GRAPH DirectedGraph)))
    (<=>
-      (equal (GraphPathFn ?NODE1 ?NODE2) ?PATH)
-      (equal (GraphPathFn ?NODE2 ?NODE1) ?PATH)))
+      (instance ?PATH (GraphPathFn ?NODE1 ?NODE2))
+      (instance ?PATH (GraphPathFn ?NODE2 ?NODE1))))
 
 (instance CutSetFn UnaryFunction)
 (domain CutSetFn 1 Graph)
@@ -6543,7 +6585,7 @@ the concept of three meters is represented as (&%MeasureFn 3
 (=>
    (and
       (instance ?REL RelationExtendedToQuantities)
-      (instance ?REL BinaryRelation)
+      (instance ?REL BinaryPredicate)
       (instance ?NUMBER1 RealNumber)
       (instance ?NUMBER2 RealNumber)
       (?REL ?NUMBER1 ?NUMBER2))
@@ -6551,6 +6593,14 @@ the concept of three meters is represented as (&%MeasureFn 3
       (=>
          (instance ?UNIT UnitOfMeasure)
          (?REL (MeasureFn ?NUMBER1 ?UNIT) (MeasureFn ?NUMBER2 ?UNIT)))))
+
+(=>
+  (and
+    (instance ?REL RelationExtendedToQuantities)
+    (equal ?Q1 (MeasureFn ?I1 ?U))
+    (equal ?Q2 (MeasureFn ?I2 ?U))
+    (?REL ?I1 ?I2))
+  (?REL ?Q1 ?Q2))
 
 (subclass UnitOfMeasureMultiplier UnaryFunction)
 (subclass UnitOfMeasureMultiplier TotalValuedRelation)
@@ -6620,7 +6670,7 @@ a &%UnitOfMeasure that is equal to 1,000,000,000 units of the original
   (and
     (instance ?UNIT UnitOfMeasure)
     (equal ?GIGAUNIT (GigaFn ?UNIT)))
-  (equal (MeasureFn 1 ?GIGAUNIT) (MeasureFn 1000000000 ?UNIT)))
+  (equal (MeasureFn 1 ?GIGAUNIT) (MeasureFn 1000000 (KiloFn ?UNIT))))
 
 (instance TeraFn UnitOfMeasureMultiplier)
 (domain TeraFn 1 UnitOfMeasure)
@@ -6636,7 +6686,7 @@ into a &%UnitOfMeasure that is equal to 1,000,000,000,000 units of the original
   (and
     (instance ?UNIT UnitOfMeasure)
     (equal ?TERAUNIT (TeraFn ?UNIT)))
-  (equal (MeasureFn 1 ?TERAUNIT) (MeasureFn 1000000000000 ?UNIT)))
+  (equal (MeasureFn 1 ?TERAUNIT) (MeasureFn 1000000000 (KiloFn ?UNIT))))
 
 (instance MilliFn UnitOfMeasureMultiplier)
 (domain MilliFn 1 UnitOfMeasure)
@@ -7596,15 +7646,15 @@ constant.")
 
 (equal
   (MeasureFn ?NUMBER AngularDegree)
-  (MeasureFn (MultiplicationFn ?NUMBER (DivisionFn Pi 180)) Radian))
+  (MeasureFn (MultiplicationFn ?NUMBER (DivisionFn Pi 180.0)) Radian))
 
 (=>
    (measure ?ANGLE (MeasureFn ?NUMBER AngularDegree))
    (and
-      (greaterThanOrEqualTo ?NUMBER 0)
-      (lessThanOrEqualTo ?NUMBER 360)))
+      (greaterThanOrEqualTo ?NUMBER 0.0)
+      (lessThanOrEqualTo ?NUMBER 360.0)))
 
-(equal (MeasureFn 0 AngularDegree) (MeasureFn 360 AngularDegree))
+(equal (MeasureFn 0.0 AngularDegree) (MeasureFn 360.0 AngularDegree))
 
 ; Other interesting units of measure
 
@@ -7713,6 +7763,7 @@ specifying the age of the &%Object.")
    (duration (TimeIntervalFn (BeginFn (WhenFn ?OBJ)) ?TIME) ?DURATION))
 
 (subrelation linearExtent measure)
+(instance linearExtent BinaryPredicate)
 (domain linearExtent 2 LengthMeasure)
 (documentation linearExtent EnglishLanguage "&%BinaryPredicate that is used to state the 
 measure of an &%Object from one point to another point along its surface.  Note
@@ -7732,6 +7783,7 @@ of an &%Object from side to side at its widest span.")
 一边到另一边最大的距离。")
 
 (subrelation height linearExtent)
+(instance height BinaryPredicate)
 (domain height 1 SelfConnectedObject)
 (domain height 2 LengthMeasure)
 (documentation height EnglishLanguage "The height of an &%Object is the distance between
@@ -7814,11 +7866,11 @@ diameter of the &%Circle ?CIRCLE has a length of ?LENGTH.")
 ?CIRCLE 的直径的长度是 ?LENGTH。")
 
 (=>
-   (diameter ?CIRCLE ?LENGTH)
-   (exists (?HALF)
-      (and
-         (radius ?CIRCLE ?HALF)
-         (equal (MultiplicationFn ?HALF 2) ?LENGTH))))
+  (diameter ?CIRCLE ?LENGTH)
+  (exists (?N__HALF ?U__HALF)
+    (and
+      (radius ?CIRCLE (MeasureFn ?N__HALF ?U__HALF))
+      (equal (MeasureFn (MultiplicationFn ?N__HALF 2) ?U__HALF) ?LENGTH))))
 
 (instance distance SingleValuedRelation)
 (instance distance SpatialRelation)
@@ -7841,9 +7893,16 @@ separates two distinct objects.")
    (distance ?OBJ1 ?OBJ2 ?QUANT)
    (distance ?OBJ2 ?OBJ1 ?QUANT))
 
-(subrelation altitude distance)
+(=>
+  (altitude ?OBJ1 ?OBJ2 ?Q)
+  (distance ?OBJ1 ?OBJ2 ?Q))
+
 (instance altitude SingleValuedRelation)
 (instance altitude PartialValuedRelation)
+(domain altitude 1 Physical)
+(domain altitude 2 Physical)
+(domain altitude 3 LengthMeasure)
+
 (documentation altitude EnglishLanguage "A &%TernaryPredicate that is
 used to state the &%distance between the &%top of an &%Object and
 another point that is below the &%top of the &%Object (often this
@@ -8358,10 +8417,13 @@ have a &%TimeInterval as a common part.")
       (?REL ?OBJ1 ?OBJ2))
    (overlapsTemporally (WhenFn ?OBJ1) (WhenFn ?OBJ2)))
 
-(subrelation during temporalPart)
+(=>
+  (during ?SMALL ?BIG)
+  (temporalPart ?SMALL ?BIG))
+
 (instance during TransitiveRelation)
 (instance during IrreflexiveRelation)
-(subrelation during overlapsTemporally)
+; (subrelation during overlapsTemporally)
 (domain during 1 TimeInterval)
 (domain during 2 TimeInterval)
 (documentation during EnglishLanguage "(&%during ?INTERVAL1 ?INTERVAL2) means that
@@ -8625,8 +8687,8 @@ individuals.")
 (domainSubclass MonthFn 2 Year)
 (rangeSubclass MonthFn Month)
 (documentation MonthFn EnglishLanguage "A &%BinaryFunction that maps a subclass of &%Month 
-and a subclass of &%Year to the class containing the &%Month corresponding to that 
-&%Year. For example (&%MonthFn &%August (&%YearFn 1912)) is the class containing the 
+and a subclass of &%Year to the class containing the &%Month corresponding to that
+&%Year. For example (&%MonthFn &%August (&%YearFn 1912)) is the class containing the
 eighth &%Month, i.e. August, of the &%Year 1912.  For another example, (&%MonthFn &%August
 &%Year) is equal to &%August, the class of all months of August.  Note that this function
 returns a &%Class as a value.  The reason for this is that the related functions, viz.
@@ -8733,7 +8795,7 @@ the class of all instances of quarter past the hour.  For still another example,
 (instance SecondFn TemporalRelation)
 (instance SecondFn BinaryFunction)
 (instance SecondFn PartialValuedRelation)
-(domain SecondFn 1 PositiveRealNumber)
+(domain SecondFn 1 PositiveInteger)
 (domainSubclass SecondFn 2 Minute)
 (rangeSubclass SecondFn Second)
 (documentation SecondFn EnglishLanguage "A &%BinaryFunction that assigns a 
@@ -8762,6 +8824,54 @@ the 18th day of August 1912.")
       (equal (SubtractionFn ?NUMBER2 ?NUMBER1) 1))
    (meetsTemporally ?SECOND1 ?SECOND2))
 
+(=>
+  (and
+    (instance ?Y1 (YearFn ?N1))
+    (instance ?Y2 (YearFn ?N2))
+    (equal ?T1 (BeginFn ?Y1))
+    (equal ?T2 (BeginFn ?Y2))
+    (greaterThan ?N2 ?N1))
+  (before ?T1 ?T2))
+
+(=>
+  (and
+    (instance ?Y1 (YearFn ?N1))
+    (instance ?Y2 (YearFn ?N2))
+    (greaterThan ?N2 ?N1))
+  (earlier ?Y1 ?Y2))
+
+(=>
+  (and
+    (instance ?M1 (MonthFn ?N1 (YearFn ?Y)))
+    (instance ?M2 (MonthFn ?N2 (YearFn ?Y)))
+    (equal ?T1 (BeginFn ?M1))
+    (equal ?T2 (BeginFn ?M2))
+    (successorClass ?N1 ?N2))
+  (before ?T1 ?T2))
+
+(=>
+  (and
+    (instance ?M1 (MonthFn ?N1 (YearFn ?Y)))
+    (instance ?M2 (MonthFn ?N2 (YearFn ?Y)))
+    (successorClass ?N1 ?N2))
+  (earlier ?M1 ?M2))
+
+(=>
+  (and
+    (instance ?D1 (DayFn ?N1 (MonthFn ?M (YearFn ?Y))))
+    (instance ?D2 (DayFn ?N2 (MonthFn ?M (YearFn ?Y))))
+    (equal ?T1 (BeginFn ?D1))
+    (equal ?T2 (BeginFn ?D2))
+    (greaterThan ?N2 ?N1))
+  (before ?T1 ?T2))
+
+(=>
+  (and
+    (instance ?D1 (DayFn ?N1 (MonthFn ?M (YearFn ?Y))))
+    (instance ?D2 (DayFn ?N2 (MonthFn ?M (YearFn ?Y))))
+    (greaterThan ?N2 ?N1))
+  (earlier ?D1 ?D2))
+
 (subclass Year TimeInterval)
 (relatedInternalConcept Year YearFn)
 (relatedInternalConcept Year YearDuration)
@@ -8776,7 +8886,7 @@ the 18th day of August 1912.")
    (and
       (instance ?YEAR1 Year)
       (instance ?YEAR2 Year)
-      (equal (SubtractionFn ?YEAR2 ?YEAR1) 1))
+      (equal (SubtractionFn ?YEAR2 ?YEAR1) (MeasureFn 1 YearDuration)))
    (meetsTemporally ?YEAR1 ?YEAR2))
 
 (subclass Decade TimeInterval)
@@ -8801,21 +8911,13 @@ the 18th day of August 1912.")
       (instance ?D Day)
       (equal ?M (EndFn ?D)))))
 
-(instance EveningFn TemporalRelation)
-(instance EveningFn UnaryFunction)
-(instance EveningFn PartialValuedRelation)
-(domainSubclass EveningFn 1 Day)
-(rangeSubclass EveningFn Evening)
-(documentation EveningFn EnglishLanguage "A &%UnaryFunction that returns the
-class of &%Evenings of the given class of &%Day.")
-
 (instance MorningFn TemporalRelation)
 (instance MorningFn UnaryFunction)
 (instance MorningFn PartialValuedRelation)
-(domainSubclass MorningFn 1 Day)
-(rangeSubclass MorningFn Morning)
+(domain MorningFn 1 Day)
+(range MorningFn Morning)
 (documentation MorningFn EnglishLanguage "A &%UnaryFunction that returns the
-class of &%Mornings of the given class of &%Day.")
+class of &%Mornings of the given &%Day.")
 
 (=>
   (equal ?E (MorningFn ?D))
@@ -8824,10 +8926,10 @@ class of &%Mornings of the given class of &%Day.")
 (instance AfternoonFn TemporalRelation)
 (instance AfternoonFn UnaryFunction)
 (instance AfternoonFn PartialValuedRelation)
-(domainSubclass AfternoonFn 1 Day)
-(rangeSubclass AfternoonFn Afternoon)
+(domain AfternoonFn 1 Day)
+(range AfternoonFn Afternoon)
 (documentation AfternoonFn EnglishLanguage "A &%UnaryFunction that returns the
-class of &%Afternoons of the given class of &%Day.")
+class of &%Afternoons of the given &%Day.")
 
 (=>
   (equal ?E (AfternoonFn ?D))
@@ -8866,10 +8968,10 @@ which is the end of &%Afternoon, and end at midnight.")
 (instance EveningFn TemporalRelation)
 (instance EveningFn UnaryFunction)
 (instance EveningFn PartialValuedRelation)
-(domainSubclass EveningFn 1 Day)
-(rangeSubclass EveningFn Evening)
+(domain EveningFn 1 Day)
+(range EveningFn Evening)
 (documentation EveningFn EnglishLanguage "A &%UnaryFunction that returns the
-class of &%Evenings of the given class of &%Day.")
+class of &%Evenings of the given &%Day.")
 
 (=>
   (equal ?E (EveningFn ?D))
@@ -8878,7 +8980,7 @@ class of &%Evenings of the given class of &%Day.")
 (instance WeekFn TemporalRelation)
 (instance WeekFn BinaryFunction)
 (instance WeekFn PartialValuedRelation)
-(domain WeekFn 1 PositiveRealNumber)
+(domain WeekFn 1 PositiveInteger)
 (domainSubclass WeekFn 2 Year)
 (rangeSubclass WeekFn Week)
 (documentation WeekFn EnglishLanguage "A &%BinaryFunction that assigns a
@@ -8887,13 +8989,15 @@ corresponding to that &%PositiveRealNumber.  For example, (&%WeekFn 4 (&%YearFn 
 is the singular &%Class of all fourth &%Weeks of the &%Year 1999.")
 
 (=>
-  (equal ?W (WeekFn ?N ?Y))
-  (during ?W ?Y))
+  (and
+    (instance ?W (WeekFn ?N ?Y))
+    (instance ?YI ?Y))
+  (during ?W ?YI))
 
 (instance QuarterFn TemporalRelation)
 (instance QuarterFn BinaryFunction)
 (instance QuarterFn PartialValuedRelation)
-(domain QuarterFn 1 PositiveRealNumber)
+(domain QuarterFn 1 PositiveInteger)
 (domainSubclass QuarterFn 2 Year)
 (rangeSubclass QuarterFn QuarterYear)
 (documentation QuarterFn EnglishLanguage "A &%BinaryFunction that assigns a
@@ -8902,8 +9006,10 @@ corresponding to that &%PositiveRealNumber.  For example, (&%QuarterFn 4 (&%Year
 is the singular &%Class of the last &%QuarterYear of the &%Year 1999.")
 
 (=>
-  (equal ?Q (QuarterFn ?N ?Y))
-  (during ?Q ?Y))
+  (and
+    (instance ?Q (QuarterFn ?N ?Y))
+    (instance ?YI ?Y))
+  (during ?Q ?YI))
 
 (subclass QuarterYear TimeInterval)
 (documentation QuarterYear EnglishLanguage "A period of three months.")
@@ -8928,6 +9034,34 @@ divisible by 400 (this latter case is known as a leap century).")
          (equal (RemainderFn ?NUMBER 4) 0)
          (not (equal (RemainderFn ?NUMBER 100) 0)))
       (equal (RemainderFn ?NUMBER 400) 0)))
+
+(instance successorClass BinaryPredicate)
+(instance successorClass TransitiveRelation)
+(domain successorClass 1 SetOrClass)
+(domain successorClass 2 SetOrClass)
+(documentation successorClass EnglishLanguage "The next class is a sequence
+of classes, such as days of the week. The first argument is 'prior' to the
+second argument.")
+(relatedInternalConcept successorClass successor)
+
+(successorClass January February)
+(successorClass February March)
+(successorClass March April)
+(successorClass April May)
+(successorClass May June)
+(successorClass June July)
+(successorClass July August)
+(successorClass August September)
+(successorClass September October)
+(successorClass October November)
+(successorClass November December)
+
+(successorClass Sunday Monday)
+(successorClass Monday Tuesday)
+(successorClass Tuesday Wednesday)
+(successorClass Wednesday Thursday)
+(successorClass Thursday Friday)
+(successorClass Friday Saturday)
 
 (subclass Month TimeInterval)
 (relatedInternalConcept Month MonthFn)
@@ -8996,8 +9130,8 @@ divisible by 400 (this latter case is known as a leap century).")
 
 (=>
    (and
-      (equal ?MONTH1 (MonthFn April ?YEAR))
-      (equal ?MONTH2 (MonthFn May ?YEAR)))
+      (instance ?MONTH1 (MonthFn April ?YEAR))
+      (instance ?MONTH2 (MonthFn May ?YEAR)))
    (meetsTemporally ?MONTH1 ?MONTH2))
 
 (subclass May Month)
@@ -9519,10 +9653,16 @@ is a &%part of the other.")
   (overlapsPartially ?OBJ1 ?OBJ2)
   (overlapsSpatially ?OBJ1 ?OBJ2))
 
-(subrelation superficialPart part)
+(=>
+  (superficialPart ?PART ?WHOLE)
+  (part ?PART ?WHOLE))
+
 (instance superficialPart IrreflexiveRelation)
 (instance superficialPart TransitiveRelation)
 (instance superficialPart PartialValuedRelation)
+(domain superficialPart 1 Object)
+(domain superficialPart 2 Object)
+
 (documentation superficialPart EnglishLanguage "(&%superficialPart ?OBJ1 ?OBJ2)
 means that ?OBJ1 is a part of ?OBJ2 that has no interior parts of its own
 (or, intuitively, that only overlaps those parts of ?OBJ2 that are
@@ -9806,10 +9946,10 @@ exactly the same things as the hole itself.")
   (exists (?HOLE2)
     (properPart ?HOLE2 ?HOLE1)))
 
-(instance HoleHostFn SpatialRelation)
+;(instance HoleHostFn SpatialRelation)
 (instance HoleHostFn UnaryFunction)
-(instance HoleHostFn TotalValuedRelation)
-(instance HoleHostFn AsymmetricRelation)
+;(instance HoleHostFn TotalValuedRelation)
+;(instance HoleHostFn AsymmetricRelation)
 (domain HoleHostFn 1 Hole)
 (range HoleHostFn Object)
 (documentation HoleHostFn EnglishLanguage "A &%UnaryFunction that maps a &%Hole to
@@ -9980,10 +10120,10 @@ in common (rather, they may occupy the same spatial region).")
     (properPart ?OBJ2 ?OBJ1))
   (properlyFills ?OBJ2 ?HOLE))
 
-(instance HoleSkinFn SpatialRelation)
+;(instance HoleSkinFn SpatialRelation)
 (instance HoleSkinFn UnaryFunction)
-(instance HoleSkinFn TotalValuedRelation)
-(instance HoleSkinFn AsymmetricRelation)
+;(instance HoleSkinFn TotalValuedRelation)
+;(instance HoleSkinFn AsymmetricRelation)
 (domain HoleSkinFn 1 Hole)
 (range HoleSkinFn Object)
 (documentation HoleSkinFn EnglishLanguage "A &%UnaryFunction that maps a &%Hole to the 
@@ -11292,6 +11432,7 @@ brought into immediate physical contact with one another.")
       (holdsDuring (EndFn (WhenFn ?TOUCH)) (connected ?OBJ1 ?OBJ2))))
 
 (subrelation grasps meetsSpatially)
+(instance grasps BinaryPredicate)
 (domain grasps 1 Animal)
 (domain grasps 2 Object)
 (documentation grasps EnglishLanguage "The state of grasping an &%Object.  (&%grasps
@@ -11420,6 +11561,7 @@ to direct the behavior of another &%Object, whether an &%Agent or not.")
 指挥 &%Agent 自己或另外一 个&%Object 的行为。")
 
 (subclass Driving Guiding)
+(subclass Driving Transportation)
 (documentation Driving EnglishLanguage "Controlling the direction and/or speed of a
 &%Vehicle.  This includes navigating a ship, driving a car or truck,
 operating a train, etc.")
@@ -11931,9 +12073,7 @@ a state of affairs which might be realized in the future.")
    (exists (?TIME)
       (and
          (holdsDuring ?TIME ?FORMULA)
-         (or
-            (before ?TIME (WhenFn ?PREDICT))
-            (earlier ?TIME (WhenFn ?PREDICT))))))
+         (earlier ?TIME (WhenFn ?PREDICT)))))
 
 (subclass Remembering PsychologicalProcess)
 (documentation Remembering EnglishLanguage "The &%Class of &%PsychologicalProcesses which
@@ -13493,7 +13633,6 @@ and glittering.")
    (attribute ?REGION Illuminated))
 
 (subclass RadiatingInfrared RadiatingElectromagnetic)
-(subclass RadiatingXRay RadiatingElectromagnetic)
 (documentation RadiatingXRay EnglishLanguage "A form of &%RadiatingElectromagnetic with
 &%wavelength ranging from 0.01 to 10 &%Nanometers, corresponding to frequencies in the
 range 30 petahertz to 30 exahertz and energies in the range 100 eV to 100 keV.")
@@ -14284,6 +14423,7 @@ else.  (&%inhabits ?ORGANISM ?OBJECT) means that ?OBJECT is the residence
       (holdsDuring ?TIME (located ?ORGANISM ?OBJ)))))
 
 (subrelation home inhabits)
+(instance home BinaryPredicate)
 (domain home 1 Human)
 (domain home 2 PermanentResidence)
 (documentation home EnglishLanguage "The relation between a &%Human and a 
@@ -14292,6 +14432,7 @@ else.  (&%inhabits ?ORGANISM ?OBJECT) means that ?OBJECT is the residence
 之间的关系。")
 
 (subrelation stays inhabits)
+(instance stays BinaryPredicate)
 (disjointRelation stays home)
 (domain stays 1 Human)
 (domain stays 2 TemporaryResidence)
@@ -15806,12 +15947,6 @@ temporary, i.e. where no one makes his/her &%home.")
 (documentation TemporaryResidence ChineseLanguage "这一处纯粹临时的 &%Residence，即是没有人会把
 它当成是他/她的 &%home。")
 
-(=>
-  (instance ?RESIDENCE TemporaryResidence)
-  (not
-    (exists (?PERSON)
-      (home ?PERSON ?RESIDENCE))))
-
 (subclass ResidentialBuilding Building)
 (subclass ResidentialBuilding Residence)
 (documentation ResidentialBuilding EnglishLanguage "A &%Building which provides some
@@ -16123,6 +16258,7 @@ system with a stable identity.")
          (part ?COMP2 ?MACHINE))))
 
 (subrelation engineeringSubcomponent properPart)
+(instance engineeringSubcomponent BinaryPredicate)
 (domain engineeringSubcomponent 1 EngineeringComponent)
 (domain engineeringSubcomponent 2 EngineeringComponent)
 (documentation engineeringSubcomponent EnglishLanguage "(&%engineeringSubcomponent ?SUB
@@ -16388,7 +16524,6 @@ the immediate family of ?PERSON, i.e. the &%Group consisting of the &%parents of
         (parent ?PERSON ?MEMBER)))))
 
 (instance relative BinaryPredicate)
-(instance relative SymmetricRelation)
 (domain relative 1 Organism)
 (domain relative 2 Organism)
 
@@ -16430,7 +16565,7 @@ relationships. (&%familyRelation ?ORGANISM1 ?ORGANISM2) means that
          (ancestor ?ORGANISM3 ?ORGANISM1)
          (ancestor ?ORGANISM3 ?ORGANISM2))))
 
-(subrelation ancestor familyRelation)
+; (subrelation ancestor familyRelation)
 (instance ancestor TransitiveRelation)
 (instance ancestor IrreflexiveRelation)
 (instance ancestor TotalValuedRelation)
@@ -16448,7 +16583,7 @@ etc.")
 ;(subrelation parent ancestor)
 
 (instance parent BinaryPredicate)
-(subrelation parent familyRelation)
+; (subrelation parent familyRelation)
 (instance parent AsymmetricRelation)
 (instance parent IntransitiveRelation)
 (instance parent TotalValuedRelation)
@@ -16492,7 +16627,11 @@ of ?CHILD.")
 
 (instance mother SingleValuedRelation)
 (instance mother PartialValuedRelation)
-(subrelation mother parent)
+
+(=>
+  (mother ?A ?B)
+  (parent ?A ?B))
+
 (domain mother 1 Organism)
 (domain mother 2 Organism)
 (documentation mother EnglishLanguage "The general relationship of motherhood.
@@ -16506,7 +16645,11 @@ of ?CHILD.")
 
 (instance father SingleValuedRelation)
 (instance father PartialValuedRelation)
-(subrelation father parent)
+
+(=>
+  (father ?A ?B)
+  (parent ?A ?B))
+
 (domain father 1 Organism)
 (domain father 2 Organism)
 (documentation father EnglishLanguage "The general relationship of fatherhood.
@@ -16519,6 +16662,7 @@ of ?CHILD.")
    (father ?CHILD ?FATHER)
    (attribute ?FATHER Male))
 
+(instance daughter BinaryPredicate)
 (subrelation daughter parent)
 (domain daughter 1 Organism)
 (domain daughter 2 Organism)
@@ -16533,12 +16677,13 @@ of ?PARENT.")
    (attribute ?CHILD Female))
 
 (subrelation son parent)
+(instance son BinaryPredicate)
 (domain son 1 Organism)
 (domain son 2 Organism)
 (documentation son EnglishLanguage "The general relationship of being a son.
 (&%son ?CHILD ?PARENT) means that ?CHILD is the biological
 son of ?PARENT.")
-(documentation son EnglishLanguage "这是儿子的概括关系。(&%son ?CHILD ?PARENT)的意思是 ?CHILD
+(documentation son ChineseLanguage "这是儿子的概括关系。(&%son ?CHILD ?PARENT)的意思是 ?CHILD
 是 ?PARENT 的亲生儿子。")
 
 (=>
@@ -16667,7 +16812,7 @@ non-symmetric version of this predicate, &%acquaintance.")
 &%Humans.")
 (documentation spouse ChineseLanguage "这是两个 &%Human 的婚姻关系。")
 
-(subrelation husband spouse)
+; (subrelation husband spouse)
 (instance husband AsymmetricRelation)
 (instance husband IrreflexiveRelation)
 (instance husband PartialValuedRelation)
@@ -16679,7 +16824,7 @@ husband of ?WOMAN.")
 (documentation husband ChineseLanguage "(&%husband ?MAN ?WOMAN)的意思是 ?MAN 是 ?WOMAN 的
 丈夫。")
 
-(subrelation wife spouse)
+; (subrelation wife spouse)
 (instance wife AsymmetricRelation)
 (instance wife IrreflexiveRelation)
 (domain wife 1 Woman)
@@ -17161,6 +17306,7 @@ intersected with its back (see &%BackFn).")
 (documentation False ChineseLanguage "这代表 &%TruthValue 属假。")
 
 (subrelation truth property)
+(instance truth BinaryPredicate)
 (domain truth 1 Sentence)
 (domain truth 2 TruthValue)
 (documentation truth EnglishLanguage "The &%BinaryPredicate that relates a &%Sentence
@@ -17389,7 +17535,7 @@ western part of the United States.")
 
 (=>
    (equal (RelativeTimeFn ?TIME1 PacificTimeZone) ?TIME2)
-   (equal ?TIME2 (AdditionFn ?TIME1 8)))
+   (equal ?TIME2 (AdditionFn ?TIME1 (MeasureFn 8 HourDuration))))
 
 (instance MountainTimeZone TimeZone)
 (documentation MountainTimeZone EnglishLanguage "A &%TimeZone that covers much of the
@@ -17398,7 +17544,7 @@ Rocky Mountain region of the United States.")
 
 (=>
    (equal (RelativeTimeFn ?TIME1 MountainTimeZone) ?TIME2)
-   (equal ?TIME2 (AdditionFn ?TIME1 7)))
+   (equal ?TIME2 (AdditionFn ?TIME1 (MeasureFn 7 HourDuration))))
 
 (instance CentralTimeZone TimeZone)
 (documentation CentralTimeZone EnglishLanguage "A &%TimeZone that covers much of the
@@ -17407,7 +17553,7 @@ midwestern United States.")
 
 (=>
    (equal (RelativeTimeFn ?TIME1 CentralTimeZone) ?TIME2)
-   (equal ?TIME2 (AdditionFn ?TIME1 6)))
+   (equal ?TIME2 (AdditionFn ?TIME1 (MeasureFn 6 HourDuration))))
 
 (instance EasternTimeZone TimeZone)
 (documentation EasternTimeZone EnglishLanguage "A &%TimeZone that covers much of the
@@ -17416,7 +17562,7 @@ eastern United States.")
 
 (=>
    (equal (RelativeTimeFn ?TIME1 EasternTimeZone) ?TIME2)
-   (equal ?TIME2 (AdditionFn ?TIME1 5)))
+   (equal ?TIME2 (AdditionFn ?TIME1 (MeasureFn 5 HourDuration))))
 
 (instance RelativeTimeFn BinaryFunction)
 (instance RelativeTimeFn TemporalRelation)
@@ -18630,6 +18776,83 @@ down commentaries ?STR on a defined &%Entity ?ENT")
     (and
       (instance ?OBJECT ?Y)
       (result ?X ?OBJECT))))
+
+
+(documentation minValue EnglishLanguage "The minimum possible value for a given
+numerical argument of a &%Relation. The second argument is the argument number
+of the relation and the third argument is the minimum value.")
+(instance minValue TernaryRelation)
+(domain minValue 1 Predicate)
+(domain minValue 2 Integer)
+(domain minValue 3 Quantity)
+
+(=>
+  (and
+    (minValue ?R ?ARG ?N)
+    (?R @ARGS)
+    (equal ?VAL (ListOrderFn (ListFn @ARGS) ?ARG)))
+  (greaterThan ?VAL ?N))
+
+(documentation maxValue EnglishLanguage "The maximum possible value for a given
+numerical argument of a &%Relation. The second argument is the argument number
+of the relation and the third argument is the maximum value.")
+(instance maxValue TernaryRelation)
+(domain maxValue 1 Predicate)
+(domain maxValue 2 Integer)
+(domain maxValue 3 Quantity)
+
+(=>
+  (and
+    (maxValue ?R ?ARG ?N)
+    (?R @ARGS)
+    (equal ?VAL (ListOrderFn (ListFn @ARGS) ?ARG)))
+  (greaterThan ?N ?VAL))
+
+
+(documentation defaultMinValue EnglishLanguage "The minimum likely value for a given
+numerical argument of a &%Relation. The second argument is the argument number
+of the relation and the third argument is the minimum value.")
+(instance defaultMinValue TernaryRelation)
+(domain defaultMinValue 1 Predicate)
+(domain defaultMinValue 2 Integer)
+(domain defaultMinValue 3 Quantity)
+
+(=>
+  (and
+    (defaultMinValue ?R ?ARG ?N)
+    (?R @ARGS)
+    (equal ?VAL (ListOrderFn (ListFn @ARGS) ?ARG)))
+  (modalAttribute (greaterThan ?VAL ?N) Likely))
+
+(documentation defaultMaxValue EnglishLanguage "The maximum likely value for a given
+numerical argument of a &%Relation. The second argument is the argument number
+of the relation and the third argument is the minimum value.")
+(instance defaultMaxValue TernaryRelation)
+(domain defaultMaxValue 1 Predicate)
+(domain defaultMaxValue 2 Integer)
+(domain defaultMaxValue 3 Quantity)
+
+(=>
+  (and
+    (defaultMaxValue ?R ?ARG ?N)
+    (?R @ARGS)
+    (equal ?VAL (ListOrderFn (ListFn @ARGS) ?ARG)))
+  (modalAttribute (greaterThan ?N ?VAL) Likely))
+
+(documentation defaultValue EnglishLanguage "The likely value for a given
+numerical argument of a &%Relation. The second argument is the argument number
+of the relation and the third argument is the likely value.")
+(instance defaultValue TernaryRelation)
+(domain defaultValue 1 Predicate)
+(domain defaultValue 2 Integer)
+(domain defaultValue 3 Quantity)
+
+(=>
+  (and
+    (defaultValue ?R ?ARG ?N)
+    (?R @ARGS)
+    (equal ?VAL (ListOrderFn (ListFn @ARGS) ?ARG)))
+  (modalAttribute (equal ?N ?VAL) Likely)) 
 
 ;; END FILE
 

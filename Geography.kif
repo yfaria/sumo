@@ -1627,12 +1627,12 @@ orientation in which the land rises or falls.  Also see
 (instance slopeGradientTowardsOrientation TernaryPredicate)
 (domain slopeGradientTowardsOrientation 1 LandArea)
 (domain slopeGradientTowardsOrientation 2 DirectionalAttribute)
-(domain slopeGradientTowardsOrientation 3 RationalNumber)
+(domain slopeGradientTowardsOrientation 3 RealNumber)
 
 (documentation slopeGradientTowardsOrientation EnglishLanguage 
 "(&%slopeGradientTowardsOrientation ?AREA ?DIRECTION ?SLOPE) means that 
 in the &%LandArea ?AREA, there is an incline of ?SLOPE towards the 
-&%DirectionalAttribute ?DIRECTION.  ?SLOPE is a &%RationalNumber 
+&%DirectionalAttribute ?DIRECTION.  ?SLOPE is a &%RealNumber
 representing the percent of vertical rise over horizontal distance.") 
 
 (instance Uphill PositionalAttribute)
@@ -3902,7 +3902,6 @@ or overhanging face of rock or earth, a precipice.")
   (instance ?cliff Cliff)
   (exists (?slope)
     (and
-      (instance ?slope RationalNumber)
       (slopeGradient ?cliff ?slope)
       (greaterThan ?slope 0.60)    ;; or more?
       (greaterThan 1.20 ?slope))))  ;; or less?
@@ -5092,6 +5091,10 @@ including land surrounding one or more &%Lakes.")
 (domain flows 2 (ExtensionFn Fluid))  
 (domain flows 1 Physical)
 (domain flows 2 Physical)
+
+(instance tributary BinaryPredicate)
+(documentation tributary EnglishLanguage "A &%Relation between two areas of &%Fluid where one &%flows
+into the other and the first argument is an area of smaller width or flow rate.")
 (subrelation tributary flows)
 (subrelation flows connected)
 
@@ -5341,6 +5344,7 @@ water flowing through land, usually into a &%River.")
       
       
 (subrelation streamOutfall properPart)
+(instance streamOutfall BinaryPredicate)
 (domain streamOutfall 1 WaterArea)
 (domain streamOutfall 2 River)
 
@@ -6399,36 +6403,6 @@ without going through the state of being a &%Liquid.")
         (MeasureFn ?Y Joule))))
   (greaterThan ?Y ?X))
   
-; 3 approximateDiameter (New)
-
-(documentation approximateDiameter EnglishLanguage "The diameter of an object if it were a
-perfect sphere of the same volume")
-
-(documentation approximateDiameter ChineseLanguage "这是假设一个为和它体积相同的完美球体的直径。")
-
-(termFormat EnglishLanguage approximateDiameter "approximate diameter")
-
-(termFormat ChineseLanguage approximateDiameter "近似直径")
-
-(domain approximateDiameter 1 SelfConnectedObject)
-
-(domain approximateDiameter 2 LengthMeasure)
-
-(instance approximateDiameter BinaryPredicate)
-
-(instance approximateDiameter SingleValuedRelation)
-
-(instance approximateDiameter TotalValueRelation)
-
-(=>
-  (and
-    (approximateDiameter ?O ?L)
-    (sphereRadius ?S (DivisionFn ?L 2))
-    (measure ?S (MeasureFn ?V1 ?VM))
-    (measure ?O (MeasureFn ?V2 ?VM))
-    (instance ?VM VolumeMeasure))
-  (equal ?V1 ?V2))
-
 ; 4 Micrometer (New)
 
 (documentation Micrometer EnglishLanguage "Submultiple of Metre. Symbol:µm. It is a unit
@@ -6758,14 +6732,14 @@ microscopically dispersed &%Insoluble particles, between 0.95 and 977 &%Nanomete
 
 (=>
   (instance ?Z Colloid)
-  (exists (?Particle)
+  (exists (?P ?S)
     (and
-      (part ?Particle ?Z)
-      (attribute ?Particle Insoluble)
-      (approximateDiameter ?Particle
-        (MeasureFn ?Size Nanometer))
-      (greaterThan 977 ?Size)
-      (greaterThan ?Size 0.95))))
+      (part ?P ?Z)
+      (attribute ?P Insoluble)
+      (approximateDiameter ?P
+        (MeasureFn ?S Nanometer))
+      (greaterThan 977 ?S)
+      (greaterThan ?S 0.95))))
 
 ; 17 ParticulateMatter (New)
 
@@ -6788,14 +6762,14 @@ of less than 1,000 &%Micrometers (0.001 mm).")
 
 (=>
   (instance ?PM ParticulateMatter)
-  (exists (?Particle ?ATMOSPHERE ?SIZE)
+  (exists (?P ?ATMOSPHERE ?S)
     (and
       (instance ?ATMOSPHERE AtmosphericRegion)
       (located ?PM ?ATMOSPHERE)
-      (part ?Particle ?PM)
-      (approximateDiameter ?Particle
-        (MeasureFn ?Size Micrometer))
-      (greaterThan 1000 ?Size))))
+      (part ?P ?PM)
+      (approximateDiameter ?P
+        (MeasureFn ?S Micrometer))
+      (greaterThan 1000 ?S))))
     
 ; 18 CoarseParticulateMatter (New)
 
@@ -6813,16 +6787,18 @@ of less than 1,000 &%Micrometers (0.001 mm).")
 
 (termFormat ChineseLanguage CoarseParticulateMatter "粗悬浮颗粒")
 
- (<=>
+(<=>
   (and
     (instance ?PM ParticulateMatter)
-    (part ?Particle ?PM)
-    (approximateDiameter ?Particle
-      (MeasureFn ?Size Micrometer))
-    (greaterThan 10 ?Size)
-    (greaterThan ?Size 2.5))
+    (part ?P ?PM)
+    (approximateDiameter ?P
+      (MeasureFn ?S Micrometer))
+    (greaterThan 10 ?S)
+    (greaterThan ?S 2.5))
   (exists (?PM10)
-    (instance ?PM10 CoarseParticulateMatter)))
+    (and
+      (instance ?PM10 CoarseParticulateMatter)
+      (part ?PM10 ?PM))))
     
 ; 19 FineParticulateMatter (New)
 
@@ -6843,12 +6819,14 @@ of less than 1,000 &%Micrometers (0.001 mm).")
  (<=>
   (and
     (instance ?PM ParticulateMatter)
-    (part ?Particle ?PM)
-    (approximateDiameter ?Particle
-      (MeasureFn ?Size Micrometer))
-    (greaterThanOrEqualTo ?Size 2.5))
+    (part ?P ?PM)
+    (approximateDiameter ?P
+      (MeasureFn ?S Micrometer))
+    (greaterThanOrEqualTo ?S 2.5))
   (exists (?PM25)
-    (instance ?PM25 FineParticulateMatter)))
+    (and
+      (instance ?PM25 FineParticulateMatter)
+      (part ?PM25 ?PM))))
 
 ; 20 LiquidDrop (New)
 
@@ -6894,12 +6872,12 @@ bounded almost completely by free surfaces.")
 (termFormat ChineseLanguage Droplet "小滴液体")
 
 (<=>
- (and
-   (instance ?LD LiquidDrop)
-   (approximateDiameter ?LD
-     (MeasureFn ?Size Micrometer))
-   (lessThan 500 ?Size))
- (instance ?LD Droplet))
+  (and
+    (instance ?LD LiquidDrop)
+    (approximateDiameter ?LD
+      (MeasureFn ?S Micrometer))
+    (lessThan 500 ?S))
+  (instance ?LD Droplet))
 
 ; 22 Aerosal (New)
 

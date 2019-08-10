@@ -63,42 +63,6 @@
 ;       (?PRED ?ENTITY ?ATT1)
 ;       (?PRED ?ENTITY ?ATT2))))
 
-(instance havePartTypes BinaryPredicate)
-(instance havePartTypes SpatialRelation)
-(domainSubclass havePartTypes 1 Object)
-(domainSubclass havePartTypes 2 Object)
-(relatedInternalConcept havePartTypes part)
-(documentation havePartTypes EnglishLanguage "(havePartTypes ?WHOLE_TYPE ?PART_TYPE) means that every instance of ?WHOLE_TYPE has as &%parts an instance of ?PART_TYPE.")
-; (havePartTypes ?WHOLE_TYPE ?PART_TYPE) means that every instance of ?WHOLE_TYPE
-; has as &%parts at least one instance of ?PART_TYPE:
-
-(=>
-  (and
-    (havePartTypes ?WHOLE_TYPE ?PART_TYPE)
-    (instance ?WHOLE ?WHOLE_TYPE))
-  (exists (?PART)
-    (and
-      (instance ?PART ?PART_TYPE)
-      (part ?PART ?WHOLE))))
-
-(instance partTypes BinaryPredicate)
-(domainSubclass partTypes 1 Object)
-(domainSubclass partTypes 2 Object)
-(subrelation partTypes typicalPart)
-(relatedInternalConcept partTypes part)
-(documentation partTypes EnglishLanguage "(partTypes ?PART_TYPE ?WHOLE_TYPE) means that every instance of ?PART_TYPE is &%parts of an instance of ?WHOLE_TYPE.")
-; (partTypes ?PART_TYPE ?WHOLE_TYPE) means that every instance of ?PART_TYPE
-; is &%parts of an instance of ?WHOLE_TYPE.
-
-(=>
-  (and
-    (partTypes ?PART_TYPE ?WHOLE_TYPE)
-    (instance ?PART ?PART_TYPE))
-  (exists (?WHOLE)
-    (and
-      (instance ?WHOLE ?WHOLE_TYPE)
-      (part ?PART ?WHOLE))))
-
 (instance classIntersection TernaryPredicate)
 (domain classIntersection 1 SetOrClass)
 (domain classIntersection 2 SetOrClass)
@@ -165,55 +129,6 @@
       (patient ?PGUIDE ?MOVED)
       (instance ?MOVED CorpuscularObject))))
 
-; ===============
-(instance shape BinaryPredicate)
-(subrelation shape property)
-(domain shape 1 Physical)
-(domain shape 2 ShapeAttribute)
-(documentation shape EnglishLanguage "(shape ?OBJECT ?SHAPE) means that the shape of ?OBJECT is ?SHAPE.")
-
-; If a &%Physical object has a property which is an instance of &%ShapeAttribute,
-; then that object has that shape:
-
-(=>
-  (and
-    (property ?OBJ ?SHAPE)
-    (instance ?OBJ Physical)
-    (instance ?SHAPE ShapeAttribute))
-  (shape ?OBJ ?SHAPE))
-
-(instance RoundTwoDimensional ShapeAttribute)
-(documentation RoundTwoDimensional EnglishLanguage "The attribute of being round in two dimensions.")
-
-(instance Elliptical ShapeAttribute)
-(subAttribute Elliptical RoundTwoDimensional)
-(documentation Elliptical EnglishLanguage "The attribute of being elliptical or oval in two dimensions.")
-
-(=>
-  (instance ?SHAPE Oval)
-  (shape ?SHAPE Elliptical))
-
-(instance Circular ShapeAttribute)
-(subAttribute Circular RoundTwoDimensional)
-(documentation Circular EnglishLanguage "The attribute of being circular in two dimensions.")
-
-(=>
-  (instance ?SHAPE Circle)
-  (shape ?SHAPE Circular))
-
-(instance DiskShaped ShapeAttribute)
-(documentation DiskShaped EnglishLanguage "The attribute of being circular in one dimension and flat in the other.")
-(subAttribute DiskShaped Circular)
-(subAttribute DiskShaped Flat)
-
-(subclass SphericalObject Object)
-(documentation SphericalObject EnglishLanguage "An object with the attribute of being spherical.")
-
-(=>
-  (instance ?SPHERE SphericalObject)
-  (shape ?SHAPE Sphere))
-
-; =========================================================
 
 (subclass Keyboard Device)
 (documentation Keyboard EnglishLanguage "A &%Keyboard has a set of keys for typing on to transmit data corresponding to those keys or to cause physical action such as striking or plucking a string, opening a valve, or marking of the selected keys on paper or some other surface.")
@@ -400,7 +315,7 @@ A &%ComputerTerminal is contrasted with a &%Printer, which is an output only dev
 (subclass ComputerKeyboard ComputerKeyboard_Generic)
 (subclass ComputerKeyboard Keyboard)
 (documentation ComputerKeyboard EnglishLanguage "A physical (as opposed to displayed) &%ComputerInputDevice for accepting typed input with a typewriter layout.  A &%ComputerKeyboard may have additional keys and arrays of keys that are not on a typewriter keyboard.")
-(hasPartTypes ComputerKeyboard ComputerKeyboardKey)
+(havePartTypes ComputerKeyboard ComputerKeyboardKey)
 
 (subclass ComputerKeypad ComputerKeyboard_Generic)
 (documentation ComputerKeypad EnglishLanguage "A &%ComputerKeyboard_Generic that does not have a typewriter layout.")
@@ -409,9 +324,23 @@ A &%ComputerTerminal is contrasted with a &%Printer, which is an output only dev
 ; ===========
 
 (subclass ComputerMouse ComputerInputDevice)
-(documentation ComputerMouse EnglishLanguage "A &%ComputerInputDevice that fits in a person's hand for accepting point and click input on a 2D surface.  A computer mouse has one or more buttons and may have a &%ScrollWheel as well.  A mouse may be connected to a computer by a power and signalling cable or may have a wireless connection.")
+(documentation ComputerMouse EnglishLanguage "A &%ComputerInputDevice that fits
+in a person's hand for accepting point and click input on a flat 2D surface.  A computer
+mouse has one or more buttons and may have a &%ScrollWheel as well.  A mouse may be
+connected to a computer by a power and signalling cable or may have a wireless connection.")
+
+(=>
+  (instance ?PROCESS
+    (OperatingFn ComputerMouse))
+  (exists (?SURFACE)
+    (and
+      (instance ?SURFACE Object)
+      (attribute ?SURFACE Flat)
+      (eventLocated ?PROCESS ?SURFACE))))
+
 (disjoint ComputerMouse ComputerKeyboard)
-(hasPartTypes ComputerMouse MouseButton)
+
+(havePartTypes ComputerMouse MouseButton)
 (typicalPart MouseButton ComputerMouse)
 
 (subclass ScrollWheel ComputerInputDevice)
@@ -563,7 +492,7 @@ A &%ComputerTerminal is contrasted with a &%Printer, which is an output only dev
 
 (subclass GameIODeviceWithAccelerometer GameIODevice)
 (documentation GameIODeviceWithAccelerometer EnglishLanguage "A type of &%GameIODevice designed to be moved in three dimensions to detect sorts of motion used in sports and other physical activities.")
-(hasPartTypes GameIODeviceWithAccelerometer Accelerometer)
+(havePartTypes GameIODeviceWithAccelerometer Accelerometer)
 
 (=>
   (and
@@ -742,10 +671,10 @@ A &%ComputerTerminal is contrasted with a &%Printer, which is an output only dev
 (subclass ComputerMenu UIElement)
 (documentation ComputerMenu EnglishLanguage "A &%ComputerMenu is an image generated by a computer program of a set of choices tha a user has for interacting with that program in conjunction with a method for the user to input a selection to the program.")
 
-(instance accessableFromMenu BinaryPredicate)
-(domain accessableFromMenu 1 Entity)   ; !!! Narrow this down
-(domain accessableFromMenu 2 ComputerMenu)
-(documentation accessableFromMenu EnglishLanguage "The property &%accessableFromMenu relates a file, computer process, or submenu to a &%ComputerMenu from which the object can be accessed.")
+(instance accessibleFromMenu BinaryPredicate)
+(domain accessibleFromMenu 1 Entity)   ; !!! Narrow this down
+(domain accessibleFromMenu 2 ComputerMenu)
+(documentation accessibleFromMenu EnglishLanguage "The property &%accessibleFromMenu relates a file, computer process, or submenu to a &%ComputerMenu from which the object can be accessed.")
 
 (subclass TextualComputerMenu ComputerMenu)
 (documentation TextualComputerMenu EnglishLanguage "A &%TextualComputerMenu is a &%ComputerMenu that textually describes a user's options and permits the user to select one of the options by typing the appropriate thing into the computer.")
@@ -797,7 +726,7 @@ A &%ComputerTerminal is contrasted with a &%Printer, which is an output only dev
   (exists (?MENU)
     (and
       (instance ?MENU GraphicalComputerMenu)
-      (accessableFromMenu ?SUB ?MENU))))
+      (accessibleFromMenu ?SUB ?MENU))))
 
 ; Note that this is not unique, since the same submenu conceptually be accessed 
 ; from multiple menus.
@@ -939,12 +868,12 @@ A &%ComputerTerminal is contrasted with a &%Printer, which is an output only dev
 (subclass ComputerMenuItem GUIActiveArea)
 (documentation ComputerMenuItem EnglishLanguage "A &%ComputerMenuItem is a &%UIElement that presents one of the user's options and informs the running program if the user selects that option.  A &%ComputerMenuItem may act as either a &%GUIRadioButton or a &%GUICheckBox.  In many instances a menu item acts as a radio button on a normal click and as a check box on a shift-click.")
 (partTypes ComputerMenuItem ComputerMenu)
-(hasPartTypes ComputerMenu ComputerMenuItem)
+(havePartTypes ComputerMenu ComputerMenuItem)
 
-(instance accessableFromMenuItem BinaryPredicate)
-(domain accessableFromMenuItem 1 Entity)   ; !!! Narrow this down
-(domain accessableFromMenuItem 2 ComputerMenuItem )
-(documentation accessableFromMenu EnglishLanguage "The property &%ComputerMenuItem relates a file, computer process, or submenu to a &%ComputerMenuItem from which the object can be accessed.")
+(instance accessibleFromMenuItem BinaryPredicate)
+(domain accessibleFromMenuItem 1 Entity)   ; !!! Narrow this down
+(domain accessibleFromMenuItem 2 ComputerMenuItem )
+(documentation accessibleFromMenu EnglishLanguage "The property &%ComputerMenuItem relates a file, computer process, or submenu to a &%ComputerMenuItem from which the object can be accessed.")
 
 (subclass GraphicalMenuItem ComputerMenuItem)
 (subclass GraphicalMenuItem GUIActiveArea)
@@ -952,7 +881,7 @@ A &%ComputerTerminal is contrasted with a &%Printer, which is an output only dev
 (documentation GraphicalMenuItem EnglishLanguage "A &%GraphicalMenuItem is a &%GUIActiveArea that is also a &%ComputerMenuItem. It presents one of the user's options and informs the running program if the user selects that option.")
 
 (partTypes GraphicalMenuItem GraphicalComputerMenu)
-(hasPartTypes GraphicalComputerMenu GraphicalMenuItem)
+(havePartTypes GraphicalComputerMenu GraphicalMenuItem)
 ; every &%GraphicalSubMenu must be accessible from some &%GraphicalMenuItem
 
 (=> 
@@ -960,7 +889,7 @@ A &%ComputerTerminal is contrasted with a &%Printer, which is an output only dev
   (exists (?MENUITEM)
     (and
       (instance ?MENU GraphicalMenuItem)
-      (accessableFromMenuItem ?SUB ?MENUITEM))))
+      (accessibleFromMenuItem ?SUB ?MENUITEM))))
 
 (subclass GUI_Link HypertextLink)
 (subclass GUI_Link GUIActiveArea)
@@ -1916,7 +1845,7 @@ The state of a GUI element normally changes to selected if the element had been 
 (subclass JumpingBackwardToActivateUIElement JumpingToActivateUIElement)
 (documentation JumpingBackwardToActivateUIElement EnglishLanguage "A &%JumpingToActiveUIElement causing the cursor to ``jump'' from its current position to whatever is considered the ``previous'' &%UIElement, making it ``Active''.")
 ; !!! Needs rule
-(udaCanSignify (ClassUnionFn (PressingKeyFn TabKey) ShiftKeyHoldDown)
+(udaCanSignify (UnionFn (PressingKeyFn TabKey) ShiftKeyHoldDown)
                SelectingActiveArea)
 (udaCanSignify (PressingKeyFn LeftArrowKey) SelectingActiveArea)
 (udaCanSignify (PressingKeyFn UpArrowKey) SelectingActiveArea)

@@ -136,7 +136,6 @@ Note that one agent could both punish and reward another agent.")
 (instance punishes BinaryRelation)
 (domain punishes 1 Agent)
 (domain punishes 2 Agent)
-(relatedInternalConcept punishes rewards)
 (termFormat EnglishLanguage punishes "punishes")
 (format EnglishLanguage punishes "%1 punishes %2")
 
@@ -232,7 +231,7 @@ case.")
 
 (instance judge CaseRole)
 (termFormat EnglishLanguage judge "judge")
-(termFormat EnglishLanguage judge "%2 is the judge in %1")
+(format EnglishLanguage judge "%2 is the judge in %1")
 
 (documentation judge EnglishLanguage "A &%CaseRole that relates the &%JudgeAtLaw in a
 case to a legal action.  Note that this is not solely a &%LegalAction because a
@@ -410,7 +409,7 @@ do what he says, at least with respect to that kind of action.")
 (termFormat EnglishLanguage distrusts "distrusts")
 (format EnglishLanguage distrusts "%1 distrusts %2")
 
-(documentation trusts EnglishLanguage "A &%Relation between two &%Agents and a
+(documentation distrusts EnglishLanguage "A &%Relation between two &%Agents and a
 class of &%Processes where the first agent does not believe that the second
 agent will do what he says, at least with respect to that kind of action, either
 because he will lie, or because he simply is not capable of performing the
@@ -530,8 +529,8 @@ in advance.")
   (attribute ?MURDER Premeditated))
 
 (instance recordForAgremeent BinaryRelation)
-(termFormat EnglishLanguage recordForAgremeent "record for agremeent")
-(format EnglishLanguage recordForAgremeent "%1 is the record for agremeent %2")
+(termFormat EnglishLanguage recordForAgremeent "record for agreement")
+(format EnglishLanguage recordForAgremeent "%1 is the record for agreement %2")
 
 (documentation recordForAgreement EnglishLanguage "This is a relation between a
 document or an action that records the propositional content of an Agreement.
@@ -542,6 +541,7 @@ record is the full content of the &%Proposition and that the &%Proposition must
 have the &%Attribute of being an &%Agreement, as opposed to some other
 &%Proposition.")
 
+(instance recordForAgreement BinaryPredicate)
 (domain recordForAgreement 1 ContentBearingPhysical)
 (domain recordForAgreement 2 Agreement)
 
