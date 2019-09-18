@@ -1,0 +1,35 @@
+
+;; list primitives
+
+(instance ConsFn BinaryFunction)
+(domain ConsFn 1 Entity)
+(domain ConsFn 2 List)
+(range  ConsFn List)
+
+;; (instance isList Predicate)
+;; (domain   isList 1 List)
+
+(equal (ListFn ?X @ROW)
+       (ConsFn ?X (ListFn @ROW)))
+
+(equal (ListFn ?X ?Y)
+       (ConsFn ?X (ConsFn ?Y NullList)))
+
+;; (isList NullList)
+;; (=> (isList ?X) (isList (ConsFn ?Y ?X)))
+;; (<=> (isList ?L) (instance ?L List))
+
+(not (inList ?X NullList))
+
+(<=> (inList ?X (ConsFn ?Y ?L))
+         (or (equal ?X ?Y)
+	     (inList ?X ?L)))
+
+(instance aE Entity)
+(instance bE Entity)
+
+(equal (ListFn bE aE) (ConsFn bE (ConsFn aE NullList)))
+(inList aE (ConsFn bE (ConsFn aE NullList)))
+(inList bE (ConsFn bE (ConsFn aE NullList)))
+(inList aE (ListFn bE aE))
+(inList bE (ListFn bE aE))
