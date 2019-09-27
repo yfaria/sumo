@@ -15,6 +15,9 @@
 (equal (ListFn ?X ?Y)
        (ConsFn ?X (ConsFn ?Y NullList)))
 
+(equal (ListFn ?X)
+       (ConsFn ?X NullList))
+
 ;; (isList NullList)
 ;; (=> (isList ?X) (isList (ConsFn ?Y ?X)))
 ;; (<=> (isList ?L) (instance ?L List))
@@ -25,11 +28,11 @@
          (or (equal ?X ?Y)
 	     (inList ?X ?L)))
 
-(instance aE Entity)
-(instance bE Entity)
+;; (instance aE Entity)
+;; (instance bE Entity)
 
-(equal (ListFn bE aE) (ConsFn bE (ConsFn aE NullList)))
-(inList aE (ConsFn bE (ConsFn aE NullList)))
-(inList bE (ConsFn bE (ConsFn aE NullList)))
-(inList aE (ListFn bE aE))
-(inList bE (ListFn bE aE))
+;; (equal (ListFn bE aE) (ConsFn bE (ConsFn aE NullList)))
+;; (inList aE (ConsFn bE (ConsFn aE NullList)))
+;; (inList bE (ConsFn bE (ConsFn aE NullList)))
+;; (inList aE (ListFn bE aE))
+;; (inList bE (ListFn bE aE))

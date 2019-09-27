@@ -16,8 +16,10 @@
  (exists (?SPINE)
    (and
      (instance ?SPINE SpinalColumn)
-     (component ?SPINE BananaSlug10))))
+     (part ?SPINE BananaSlug10))))
 
 (instance BodyPart10 BodyPart)
 (component BodyPart10 BananaSlug10)
 
+
+(instance BananaSlug10 Invertebrate)
