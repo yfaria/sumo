@@ -719,7 +719,11 @@ is a disjoint exhaustive decomposition).")
 注：これは必ずしもセットの要素が互いに素であることを意味しているわけではない（&%partitionを参照 - 
 a &%partition は互いに素な完全分解である)。")
 
-;; this is wrong. 
+;; if the purpose of this axiom is to 'type' the arguments of
+;; exhaustiveDecomposition, it is superfluous considering the
+;; declaration of its domain. Assuming that the declaration of domain
+;; on VariableArityRelation has a special propagation constraint.
+;;
 ;; (=>
 ;;    (exhaustiveDecomposition @ROW)
 ;;    (=>
@@ -727,14 +731,14 @@ a &%partition は互いに素な完全分解である)。")
 ;;       (instance ?ELEMENT Class)))
 
 (=>
-   (exhaustiveDecomposition ?CLASS @ROW)
-   (forall (?OBJ)
-      (=>
-         (instance ?OBJ ?CLASS)
-         (exists (?ITEM)
-            (and
-               (inList ?ITEM (ListFn @ROW))
-               (instance ?OBJ ?ITEM))))))
+ (exhaustiveDecomposition ?CLASS @ROW)
+ (forall (?OBJ)
+	 (=>
+          (instance ?OBJ ?CLASS)
+          (exists (?ITEM)
+		  (and
+		   (inList ?ITEM (ListFn @ROW))
+		   (instance ?OBJ ?ITEM))))))
 
 
 (instance disjointDecomposition Predicate)

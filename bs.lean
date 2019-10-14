@@ -122,7 +122,8 @@ variable a71383 : subclass Invertebrate Animal
  (=> (and (instance ?Y SetOrClass) (instance ?X SetOrClass))
   (=> (subclass ?X ?Y)
    (and (instance ?X SetOrClass) (instance ?Y SetOrClass)))))
-fof(a14,axiom,! [Y,X] : (((s_instance(Y, s_SetOrClass) & s_instance(X, s_SetOrClass)) => (s_subclass(X, Y) =>
+fof(a14,axiom,! [Y,X] : (((s_instance(Y, s_SetOrClass) & s_instance(X, s_SetOrClass)) => 
+ (s_subclass(X, Y) =>
  (s_instance(X, s_SetOrClass) & s_instance(Y, s_SetOrClass)))))).
 -/
 variable a14 : ∀ x y : U, subclass x y → ins x SetOrClass ∧ ins y SetOrClass 
@@ -131,7 +132,8 @@ variable a14 : ∀ x y : U, subclass x y → ins x SetOrClass ∧ ins y SetOrCla
 (forall (?Y ?Z ?X)
  (=> (and (instance ?X SetOrClass) (instance ?Y SetOrClass))
   (=> (and (subclass ?X ?Y) (instance ?Z ?X)) (instance ?Z ?Y))))
-fof(a15,axiom,! [Y,Z,X] : (((s_instance(X, s_SetOrClass) & s_instance(Y, s_SetOrClass)) => ((s_subclass(X, Y) & s_instance(Z, X)) => s_instance(Z, Y))))).
+fof(a15,axiom,! [Y,Z,X] : (((s_instance(X, s_SetOrClass) & s_instance(Y, s_SetOrClass)) => 
+ ((s_subclass(X, Y) & s_instance(Z, X)) => s_instance(Z, Y))))).
 -/
 variable a15 : ∀ x y z, ins x SetOrClass ∧ ins y SetOrClass → (subclass x y ∧ ins z x ∧ ins z y)
 
