@@ -719,11 +719,27 @@ is a disjoint exhaustive decomposition).")
 注：これは必ずしもセットの要素が互いに素であることを意味しているわけではない（&%partitionを参照 - 
 a &%partition は互いに素な完全分解である)。")
 
+;; if the purpose of this axiom is to 'type' the arguments of
+;; exhaustiveDecomposition, it is superfluous considering the
+;; declaration of its domain. Assuming that the declaration of domain
+;; on VariableArityRelation has a special propagation constraint.
+;;
+;; (=>
+;;    (exhaustiveDecomposition @ROW)
+;;    (=>
+;;       (inList ?ELEMENT (ListFn @ROW))
+;;       (instance ?ELEMENT Class)))
+
 (=>
-   (exhaustiveDecomposition @ROW)
-   (=>
-      (inList ?ELEMENT (ListFn @ROW))
-      (instance ?ELEMENT Class)))
+ (exhaustiveDecomposition ?CLASS @ROW)
+ (forall (?OBJ)
+	 (=>
+          (instance ?OBJ ?CLASS)
+          (exists (?ITEM)
+		  (and
+		   (inList ?ITEM (ListFn @ROW))
+		   (instance ?OBJ ?ITEM))))))
+
 
 (instance disjointDecomposition Predicate)
 (instance disjointDecomposition VariableArityRelation)
@@ -741,12 +757,38 @@ a &%partition は互いに素な完全分解である)。")
 (documentation disjointDecomposition JapaneseLanguage "&%Class C の &%disjointDecomposition
 は、相互に &%disjoint であるCのサブクラスのセットである。")
 
+;; wrong axiom, class must be explicit
+;; (=>
+;;    (disjointDecomposition @ROW)
+;;    (=>
+;;       (inList ?ELEMENT (ListFn @ROW))
+;;       (instance ?ELEMENT Class)))
+;;
+;; (=>
+;;    (disjointDecomposition ?CLASS @ROW)
+;;    (forall (?ITEM)
+;;       (=>
+;;          (inList ?ITEM (ListFn @ROW))
+;;          (subclass ?ITEM ?CLASS))))
 
 (=>
-   (disjointDecomposition @ROW)
-   (=>
-      (inList ?ELEMENT (ListFn @ROW))
-      (instance ?ELEMENT Class)))
+   (disjointDecomposition ?CLASS @ROW)
+   (forall (?ITEM1 ?ITEM2)
+      (=>
+         (and
+            (inList ?ITEM1 (ListFn @ROW))
+            (inList ?ITEM2 (ListFn @ROW))
+            (not (equal ?ITEM1 ?ITEM2)))
+         (disjoint ?ITEM1 ?ITEM2))))
+
+;; redundant with the above
+;; (=>
+;;   (disjointDecomposition ?CLASS ?ROW1 ?ROW2 ?ROW3)
+;;   (and
+;;     (disjoint ?ROW1 ?ROW2)
+;;     (disjoint ?ROW2 ?ROW3)
+;;     (disjoint ?ROW3 ?ROW1)))
+
 
 (instance partition Predicate)
 (instance partition VariableArityRelation)
@@ -765,12 +807,19 @@ subclasses in the partition.")
 クラス（サブクラスパーティション）で、C をカバーする。Cのすべてのインスタンスは、パーティション
 内の正確な1つのサブクラスのインスタンスである。")
 
+;; better make the class explicit
+;; (<=>
+;;    (partition @ROW)
+;;    (and
+;;       (exhaustiveDecomposition @ROW)
+;;       (disjointDecomposition @ROW)))
 
 (<=>
-   (partition @ROW)
+   (partition ?CLASS @ROW)
    (and
-      (exhaustiveDecomposition @ROW)
-      (disjointDecomposition @ROW)))
+      (exhaustiveDecomposition ?CLASS @ROW)
+      (disjointDecomposition ?CLASS @ROW)))
+
 
 (instance relatedInternalConcept BinaryPredicate)
 (instance relatedInternalConcept EquivalenceRelation)
@@ -4317,40 +4366,6 @@ returns the &%List containing those arguments in exactly the same order.")
 (documentation ListFn JapaneseLanguage "任意の数の引数を受け取り、それらの引数を含む &%List を
 まったく同じ順序で返す &%Function。")
 
-(=>
-   (exhaustiveDecomposition ?CLASS @ROW)
-   (forall (?OBJ)
-      (=>
-         (instance ?OBJ ?CLASS)
-         (exists (?ITEM)
-            (and
-               (inList ?ITEM (ListFn @ROW))
-               (instance ?OBJ ?ITEM))))))
-
-(=>
-   (disjointDecomposition ?CLASS @ROW)
-   (forall (?ITEM)
-      (=>
-         (inList ?ITEM (ListFn @ROW))
-         (subclass ?ITEM ?CLASS))))
-
-(=>
-   (disjointDecomposition ?CLASS @ROW)
-   (forall (?ITEM1 ?ITEM2)
-      (=>
-         (and
-            (inList ?ITEM1 (ListFn @ROW))
-            (inList ?ITEM2 (ListFn @ROW))
-            (not
-               (equal ?ITEM1 ?ITEM2)))
-         (disjoint ?ITEM1 ?ITEM2))))
-
-(=>
-  (disjointDecomposition ?CLASS ?ROW1 ?ROW2 ?ROW3)
-  (and
-    (disjoint ?ROW1 ?ROW2)
-    (disjoint ?ROW2 ?ROW3)
-    (disjoint ?ROW3 ?ROW1)))
 
 (instance ListOrderFn BinaryFunction)
 (instance ListOrderFn PartialValuedRelation)
@@ -4422,7 +4437,7 @@ value 3.")
 ;      (instance ?LIST List)
 ;      (not
 ;        (equal ?LIST NullList))
- ;     (instance ?NUMBER1 PositiveInteger))
+;      (instance ?NUMBER1 PositiveInteger))
 ;   (forall (?NUMBER2)
 ;      (<=>
 ;         (exists (?ITEM)
@@ -4524,10 +4539,10 @@ of the two &%Lists that are given as arguments.  For example, the value of
 (&%inList ?OBJ ?LIST)とは、?OBJ が &%List ?LIST 内であることを意味する。例：
 (&%inList &%Tuesday (&%ListFn &%Monday &%Tuesday &%Wednesday)) は正しい。")
 
-(=>
-   (inList ?ITEM ?LIST)
-   (exists (?NUMBER)
-      (equal (ListOrderFn ?LIST ?NUMBER) ?ITEM)))
+;; (=>
+;;    (inList ?ITEM ?LIST)
+;;    (exists (?NUMBER)
+;;       (equal (ListOrderFn ?LIST ?NUMBER) ?ITEM)))
 
 (instance subList BinaryPredicate)
 (instance subList PartialOrderingRelation)

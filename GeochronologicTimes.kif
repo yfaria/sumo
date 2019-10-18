@@ -56,11 +56,11 @@
 (=>
   (and
     (instance ?X GeochronologicTime)
-	(instance ?Y GeochronologicTime)
-	(instance ?X ?Class)
-	(instance ?Y ?Class)
-	(not (equal ?X ?Y))
-	(subclass ?class GeochronologicTime))
+    (instance ?Y GeochronologicTime)
+    (instance ?X ?Class)
+    (instance ?Y ?Class)
+    (not (equal ?X ?Y))
+    (subclass ?class GeochronologicTime))
   (not
     (overlapsTemporally ?X ?Y)))
 

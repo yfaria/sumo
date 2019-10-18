@@ -1,8 +1,8 @@
 # ignore all files in the build/ directory
 tests/ 
 
-# no .tptp files
 *.tptp
+*.ser
 
 # no Cache.kif andd UserAssertions files
 *_Cache.kif

@@ -1,0 +1,25 @@
+
+(instance BananaSlug10 Animal)
+
+(=>
+  (and
+   (instance ?A Animal)
+   (not
+     (exists (?PART)
+       (and
+        (instance ?PART SpinalColumn)
+        (part ?PART ?A)))))
+  (not
+   (instance ?A Vertebrate)))
+
+(not
+ (exists (?SPINE)
+   (and
+     (instance ?SPINE SpinalColumn)
+     (part ?SPINE BananaSlug10))))
+
+(instance BodyPart10 BodyPart)
+(component BodyPart10 BananaSlug10)
+
+
+(instance BananaSlug10 Invertebrate)
