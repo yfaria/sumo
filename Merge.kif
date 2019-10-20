@@ -168,12 +168,11 @@ is a &%subclass of ?CLASS2, i.e. every &%instance of ?CLASS1 is also an &%instan
 が?CLASS2の &%subclass である、という意味である。例えば、?CLASS1のすべての &%instance も?CLASS2
 の &%instance である。")
 
-
-(=>
-  (subclass ?X ?Y)
-  (and
-    (instance ?X SetOrClass)
-    (instance ?Y SetOrClass)))
+;; (=>
+;;   (subclass ?X ?Y)
+;;   (and
+;;     (instance ?X SetOrClass)
+;;     (instance ?Y SetOrClass)))
 
 (=>
   (and
