@@ -346,7 +346,7 @@ begin
 end
 
 include a67173
-lemma l4 (hne : nonempty U): ins Invertebrate Class:=
+lemma l4 (hne : nonempty U): ins Invertebrate Class :=
 begin
   rw a67173,
   apply l3b, repeat {assumption}
@@ -430,11 +430,11 @@ end
 include a72773 a72774
 theorem goal (hne: nonempty U) : ins BananaSlug10 Invertebrate :=
 begin
-  have h, from begin apply BS10VI, repeat{assumption} end,
+  have h, from begin apply BS10VI, repeat { assumption } end,
   cases h,
   apply false.elim,
     apply l0, 
-   repeat{assumption}
+   repeat { assumption }
 end
 
 -- tem como provar?
