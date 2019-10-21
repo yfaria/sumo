@@ -378,7 +378,7 @@ begin
           exact ((a72769 x) h.left) h3 
 end
 omit a72770 a72767 novo1 a67959 a67958 a67954 a67450 a15 a68771 a67332 
-     a72769 a68763 a67331
+     a72769 a68763 a67331 a67173
 
 include a13 a15 a72771 a71371 a71872 a71669 a69763 a67331 a71844 a72180 a67818 
         a67809 a71369 a71340 a67315 a67177 a67174 a72778 a71383 a67173 a67448 
@@ -465,27 +465,22 @@ begin
   have h  : ins subclass_m TransitiveRelation, 
     apply subclass_TransitiveRelation; assumption,
   have h1 : subclass Animal Entity, 
-    apply l1 ; 
-    assumption,
+    apply l1 ; assumption,
   have h2 : subclass Vertebrate Entity, 
     apply l2; repeat { assumption },
   have h3 : subclass Invertebrate Entity, 
-    apply l3; 
-    assumption,
+    apply l3; assumption,
   have h4 : subclass SetOrClass Entity,
-    apply (a67809 _ Abstract _); 
-    simp *, 
+    apply (a67809 _ Abstract _); simp *, 
   have h5 : ins Vertebrate Entity,
-    apply (a15 SetOrClass _ _); 
-    simp *,
+    apply (a15 SetOrClass _ _); simp *,
   have h6 : ins Invertebrate Entity,
-    apply (a15 SetOrClass _ _); 
-    simp *,
+    apply (a15 SetOrClass _ _); simp *,
   have h7 : exhaustiveDecomposition3 Animal Vertebrate Invertebrate ∧
             disjointDecomposition3 Animal Vertebrate Invertebrate,
     rw ←a67131, 
     exact a71370, simp *,
-  cases (a67115 Vertebrate Animal Invertebrate BananaSlug10) with x h8,
+  cases (a67115 Vertebrate Invertebrate Animal BananaSlug10) with x h8,
     have h9 : inList x (ListFn2 Vertebrate Invertebrate) ∧ ins BananaSlug10 x,
       apply h8.right,
         apply a15 Animal _ _;
