@@ -10,8 +10,7 @@ constant U : Type
 constants SetOrClass Set Class Object Entity NullList_m List 
           CorpuscularObject Invertebrate Vertebrate Animal SpinalColumn 
           Organism Agent Physical Abstract
-          subclass_m TransitiveRelation PartialOrderingRelation : U
-constant Relation : U --nova
+          subclass_m TransitiveRelation PartialOrderingRelation Relation : U
 constant BananaSlug10 : U
 
 constants exhaustiveDecomposition3 disjointDecomposition3 partition3 : U → U → U → Prop
@@ -29,9 +28,10 @@ constant ListFn3 : U → U → U → U
 
 /- SUMO axioms -/
 
-variable    a13 : ins subclass_m PartialOrderingRelation
+variable a13 : ins subclass_m PartialOrderingRelation
 
-variable    a15 : ∀ x y z : U, ins x SetOrClass ∧ ins y SetOrClass → (subclass x y ∧ ins z x → ins z y)
+variable a15 : ∀ x y z : U, ins x SetOrClass ∧ ins y SetOrClass → 
+ (subclass x y ∧ ins z x → ins z y)
 
 /- EDITED (see https://github.com/own-pt/cl-krr/issues/23) -/
 variable a72773 : ∀ a : U, ((ins a Animal) ∧ (¬ ∃ p : U, ins p SpinalColumn ∧ part p a)) 
@@ -72,7 +72,7 @@ variable a72180 : ins PartialOrderingRelation SetOrClass
 
 variable a71370 : partition3 Animal Vertebrate Invertebrate
 
-variable a67131 : ∀ c row0 row1 : U, (ins c Class ∧ ins row0 Class ∧  ins row1 Class) → 
+variable a67131 : ∀ (c row0 row1 : U), (ins c Class ∧ ins row0 Class ∧  ins row1 Class) → 
  (partition3 c row0 row1 ↔ (exhaustiveDecomposition3 c row0 row1 ∧ disjointDecomposition3 c row0 row1))
 
 -- EDITED (see https://github.com/own-pt/cl-krr/issues/22)
@@ -84,7 +84,8 @@ variable a67115 :
           ins row1 SetOrClass ∧ ins row1 Class ∧ 
           ins row0 Class ∧ ins row0 Entity ∧ 
           ins c Class ∧ ins c Entity →
-            exhaustiveDecomposition3 row1 row0 c → ins obj row1 → inList item (ListFn2 row0 c) ∧ ins obj item)
+            exhaustiveDecomposition3 c row0 row1 → ins obj c → 
+              inList item (ListFn2 row0 row1) ∧ ins obj item)
 
 variable a67447 : partition3 SetOrClass Set Class 
 variable a67172 : ∃ x : U, ins x Entity
@@ -106,12 +107,14 @@ variable a67332 : subclass Abstract Entity
 
 -- commented in list.kif
 variable novo1 : ∀ (x L : U), ins L Entity → ins L List → ins (ConsFn x L) List
---a67954
-variable novo2 : subclass List Relation
---a67450
-variable novo3 : subclass Relation Abstract
---a68763
-variable novo4 : ins Relation SetOrClass
+
+variable a67954 : subclass List Relation
+variable a67450 : subclass Relation Abstract
+variable a68763 : ins Relation SetOrClass
+
+variable novo5 : ¬ (Vertebrate = Invertebrate) 
+
+
 -- starting proofs
 
 /-
@@ -125,39 +128,143 @@ begin
 end
 -/
 
+-- some initial tests
+
+include a15 a71382 a71383 a71402 a72771
+
+lemma VertebrateAnimal : ∀ (x : U), ins x Vertebrate → ins x Animal := 
+begin 
+ intros a h,
+ have h1, from a15 Vertebrate Animal a,
+ apply h1,
+ exact (and.intro a71402 a72771),
+ exact (and.intro a71382 h)
+end
+omit a15 a71382 a71383 a71402 a72771
+
+include a15 a72180 a71844 a67818 a13
+lemma subclass_TransitiveRelation : ins subclass_m TransitiveRelation :=
+begin
+ specialize a15 PartialOrderingRelation TransitiveRelation subclass_m,
+ apply a15,
+ exact ⟨ a72180, a71844 ⟩, 
+ exact ⟨ a67818, a13 ⟩, 
+end
+omit a15 a72180 a71844 a67818 a13
+
+
+include a15 a72180 a71383 a71844 a13 a67818 a71402 a72771 a71371 a71382 a71369 a67809
+
+lemma VertebrateOrganism : ∀ (x : U), ins x Vertebrate → ins x Organism := 
+begin 
+ intros a h,
+ have h1, from a15 Animal Organism a, 
+ apply h1,
+ exact and.intro a72771 a71371,
+ have h0 : ∀ x, ins x Vertebrate → ins x Animal, apply VertebrateAnimal; assumption,
+ have h2, from h0 a h,
+ exact and.intro a71369 h2,
+end
+
+lemma VertebrateOrganism' : ∀ (x : U), ins x Vertebrate → ins x Organism := 
+begin
+  intros x h,
+  have h₁ : ins subclass_m TransitiveRelation,
+    specialize a15 PartialOrderingRelation TransitiveRelation subclass_m,
+    apply a15,
+      exact ⟨a72180, a71844⟩, -- tipa as relações como setorclass
+      exact ⟨a67818, a13⟩,    -- usa a "transitividade" do subclass sobre o ins
+  have h₂ : subclass Vertebrate Organism,
+    apply a67809 _  Animal _,
+      exact ⟨a71402, ⟨a72771, a71371⟩⟩,
+      exact h₁,
+      exact ⟨a71382, a71369⟩,
+  apply a15 Vertebrate _ _,
+    exact ⟨a71402, a71371⟩,
+    exact ⟨h₂, h⟩
+end
+
+lemma VertebrateOrganism'' : ∀ (x : U), ins x Vertebrate → ins x Organism := 
+begin
+  intros a h,
+  have h₁ : ins subclass_m TransitiveRelation,
+    specialize a15 PartialOrderingRelation TransitiveRelation subclass_m,
+    apply a15,
+    exact ⟨a72180, a71844⟩, 
+    exact ⟨a67818, a13⟩, 
+  have h₂ : subclass Vertebrate Organism,
+    apply a67809 _ Animal _,
+    exact ⟨a71402, ⟨a72771, a71371⟩⟩,
+    exact h₁,
+    exact ⟨a71382, a71369⟩,
+  apply a15 Vertebrate _ _,
+  exact ⟨a71402, a71371⟩,
+  exact ⟨h₂, h⟩
+end
+omit a15 a72180 a71383 a71844 a13 a67818 a71402 a72771 a71371 a71382 a71369 a67809
+
+include a15 a72180 a71844 a13 a67818 a71402 a72771 a71371 
+        a71369 a67809 a71382 a67174 a69763 a67331 a71669 a71340 
+        a67315 a67177 a71872
+lemma VertebrateEntity : ∀ (x : U), ins x Vertebrate → ins x Entity := 
+begin
+  intros a h, 
+  have h1, apply subclass_TransitiveRelation; assumption,
+  have h2 : subclass Vertebrate Organism,
+    apply a67809 _ Animal _,
+    exact ⟨a71402, ⟨ a72771, a71371 ⟩⟩,
+    exact h1,
+    exact ⟨a71382, a71369⟩,  
+  have h3 : subclass Vertebrate Agent,
+    apply a67809 _ Organism _,
+    exact ⟨a71402, ⟨ a71371, a71872 ⟩⟩,
+    exact h1,
+    exact ⟨h2, a71340⟩,
+  have h4 : subclass Vertebrate Object,
+    apply a67809 _ Agent _,
+    exact ⟨a71402, ⟨ a71872, a71669 ⟩⟩,
+    exact h1,
+    exact ⟨h3, a67315⟩,
+  have h5 : subclass Vertebrate Physical,
+    apply a67809 _ Object _,
+    exact ⟨a71402, ⟨ a71669, a69763 ⟩⟩,
+    exact h1,
+    exact ⟨h4, a67177⟩,
+  have h6 : subclass Vertebrate Entity,
+    apply a67809 _ Physical _,
+    exact ⟨a71402, ⟨ a69763, a67331 ⟩⟩,
+    exact h1,
+    exact ⟨ h5, a67174 ⟩,
+  apply a15 Vertebrate _ _,
+  exact ⟨a71402, a67331⟩,
+  exact ⟨h6, h⟩
+end
+omit a15 a72180 a71844 a13 a67818 a71402 a72771 a71371 
+     a71369 a67809 a71382 a67174 a69763 a67331 a71669 a71340 
+     a67315 a67177 a71872
+
+
+-- start proofs
 
 include a67131 a67115
 lemma lX : ∀ x c c1 c2,
-  (ins c Entity ∧ ins c1 Entity ∧ ins c2 Entity ∧ ins Class SetOrClass ∧ ins Entity SetOrClass) →
-    (ins c Class ∧ ins c1 Class ∧ ins c2 Class ∧ ins x Entity) → 
-      (partition3 c c1 c2 ∧ ¬ ins x c1) → ins x c2 := 
+(ins c Entity ∧ ins c1 Entity ∧ ins c2 Entity ∧ ins Class SetOrClass ∧ ins Entity SetOrClass) →
+  (ins c Class ∧ ins c1 Class ∧ ins c2 Class ∧ ins x Entity) → 
+    (partition3 c c1 c2 ∧ ¬ ins x c1) → ins x c2 := 
 begin
   intros a c c1 c2 h1 h2 h3,
   specialize a67131 c c1 c2,
   specialize a67115 c1 c2 c a,
-  cases h2 with h3a h3b,
-  have h3, from a67131 ⟨h1.left, ⟨h1.right.left, h1.right.right.left⟩⟩,
-  have h4, from iff.elim_left h3 h2a,
+  have h₃, from a67131 ⟨ h2.1, ⟨h2.2.1, h2.2.2.1 ⟩⟩,
+  have h4, from iff.elim_left h₃ h3.1,
   cases h4 with h4a h4b,
-  cases a67115 with c3 h5,
-  have h6, from h5.left,
+  cases a67115 with c2 h5,
   have h7, from h5.right,
-  have h8, from h1.right.right.right,
+  have h8, from h2.right.right.right,
   specialize h7 h8,
-  specialize h7 ⟨h6, ⟨h1.right.right.left, ⟨h1.right.left⟩⟩⟩
+  specialize h7 ⟨ h5.left, ⟨h2.right.right.left, ⟨ h2.right.left ⟩⟩⟩ 
  end
 omit a67131 a67115
-
-
-include a15 a72180 a71844 a67818 a13 
-lemma subclassTrans : ins subclass_m TransitiveRelation :=
-begin
-  specialize a15 PartialOrderingRelation TransitiveRelation subclass_m,
-  apply a15,
-    exact ⟨a72180, a71844⟩,
-    exact ⟨a67818, a13⟩,
-end
-omit a15 a72180 a71844 a67818 a13
 
 
 include a72773 a72774 a72772
@@ -171,11 +278,12 @@ end
 omit a72773 a72774 a72772
 
 
-include a13 a15 a72771 a71371 a71872 a71669 a69763 a67331 a71844 a72180 a67818 a67809 a71369 a71340 a67315 a67177 a67174
+include a13 a15 a72771 a71371 a71872 a71669 a69763 a67331 a71844 a72180 a67818 
+        a67809 a71369 a71340 a67315 a67177 a67174
 lemma l1 (hne : nonempty U) : subclass Animal Entity :=
 begin
   have h : ins subclass_m TransitiveRelation,
-    apply subclassTrans; assumption,
+    apply subclass_TransitiveRelation; assumption,
   apply (a67809 _ Physical _),
     simp *,
     assumption,
@@ -199,7 +307,7 @@ include a71382 a71402
 lemma l2 (hne : nonempty U) : subclass Vertebrate Entity :=
 begin
   have h : ins subclass_m TransitiveRelation,
-    apply subclassTrans; assumption,
+    apply subclass_TransitiveRelation; assumption,
   have h1 : subclass Animal Entity,
     apply l1; 
     assumption,
@@ -216,19 +324,29 @@ include a72778 a71383
 lemma l3 (hne : nonempty U) : subclass Invertebrate Entity :=
 begin
   have h : ins subclass_m TransitiveRelation,
-    apply subclassTrans; assumption,
+    apply subclass_TransitiveRelation; assumption,
   have h1 : subclass Animal Entity,
-    apply l1; 
-    assumption,
+    apply l1; assumption,
   apply a67809 _ Animal _,
   simp *,
   assumption,
   simp *,
 end
 
-omit a13 a15 a72771 a71371 a71872 a71669 a69763 a67331 a71844 a72180 a67818 a67809 a71369 a71340 a67315 a67177 a67174 a72778 a71383 
+include a67173
+lemma l4 (hne : nonempty U): ins Invertebrate Class :=
+begin
+  rw a67173,
+  apply l3, repeat { assumption }
+end
 
-include a72770 a72767 novo1 a67959 a67958 novo2 novo3 a15 a68771 a67332  a72769 novo4 a67331 
+omit a13 a15 a72771 a71371 a71872 a71669 a69763 a67331 a71844 a72180 a67818 
+     a67809 a71369 a71340 a67315 a67177 a67174 a72778 a71383 
+
+
+include a72770 a72767 novo1 a67959 a67958 a67954 a67450 a15 a68771 a67332  a72769 
+        a68763 a67331 
+
 lemma listLemma (hne : nonempty U) : ∀ x y z : U, 
   ins x Entity ∧ ins y Entity ∧ ins z Entity →
     inList x (ListFn2 y z) →
@@ -259,14 +377,19 @@ begin
         apply false.elim,
           exact ((a72769 x) h.left) h3 
 end
-omit a72770 a72767 novo1 a67959 a67958 novo2 novo3 a15 a68771 a67332  a72769 novo4 a67331
+omit a72770 a72767 novo1 a67959 a67958 a67954 a67450 a15 a68771 a67332 
+     a72769 a68763 a67331
 
-include a13 a15 a72771 a71371 a71872 a71669 a69763 a67331 a71844 a72180 a67818 a67809 a71369 a71340 a67315 a67177 a67174 a72778 a71383 a67173 a67448 a68771 a67446 a67332 a71402 novo1 novo2 novo3 a67131 a67115 a71370 a72772 a67958 a67959 a72770  a72767 a72761 a72774 a71382 a72769 novo4
+include a13 a15 a72771 a71371 a71872 a71669 a69763 a67331 a71844 a72180 a67818 
+        a67809 a71369 a71340 a67315 a67177 a67174 a72778 a71383 a67173 a67448 
+        a68771 a67446 a67332 a71402 novo1 a67954 a67450 a67131 a67115 a71370 
+        a72772 a67958 a67959 a72770  a72767 a72761 a72774 a71382 a72769 a68763
 
-lemma BS10VI (hne : nonempty U) : ins BananaSlug10 Vertebrate ∨ ins BananaSlug10 Invertebrate :=
+lemma BS10VI (hne : nonempty U) : 
+  ins BananaSlug10 Vertebrate ∨ ins BananaSlug10 Invertebrate :=
 begin
   have h : ins subclass_m TransitiveRelation,
-    apply subclassTrans; assumption,
+    apply subclass_TransitiveRelation; assumption,
   have h₁ : subclass Animal Entity, 
     apply l1; assumption,
   have h₃ : subclass SetOrClass Entity, 
@@ -284,7 +407,7 @@ begin
   have h1 : subclass Vertebrate Entity, 
     apply l2; 
     assumption,
-  have h2, from begin apply l4, repeat{assumption} end,
+  have h2, apply l4, repeat { assumption },
   have h3 : exhaustiveDecomposition3 Animal Vertebrate Invertebrate ∧ disjointDecomposition3 Animal Vertebrate Invertebrate, 
     from 
        begin 
@@ -336,17 +459,16 @@ begin
         assumption
 end
 
-lemma BS10VI2 (hne: nonempty U) : ins BananaSlug10 Vertebrate ∨ ins BananaSlug10 Invertebrate :=
+lemma BS10VI2 (hne: nonempty U) : 
+ ins BananaSlug10 Vertebrate ∨ ins BananaSlug10 Invertebrate :=
 begin 
   have h  : ins subclass_m TransitiveRelation, 
-    apply subclassTrans; 
-    assumption,
+    apply subclass_TransitiveRelation; assumption,
   have h1 : subclass Animal Entity, 
     apply l1 ; 
     assumption,
   have h2 : subclass Vertebrate Entity, 
-    apply l2; 
-    assumption, 
+    apply l2; repeat { assumption },
   have h3 : subclass Invertebrate Entity, 
     apply l3; 
     assumption,
@@ -386,34 +508,9 @@ end
 include a72773 
 theorem goal (hne: nonempty U) : ins BananaSlug10 Invertebrate :=
 begin
-  have h, from begin apply BS10VI, repeat{assumption} end,
+  have h, from begin apply BS10VI, repeat{ assumption } end,
   cases h,
   apply false.elim,
     apply l0, 
-   repeat{assumption}
-end
-
-
--- tem como provar?
-variable axiom4 : ¬ (Vertebrate = Invertebrate) 
-
-omit a15 a13 a67818 a71369 a72180 a71844 a72771 a71371 a67809 a71402 a71382
-
-include a15 a72180 a71844 a13 a67818 a71402 a72771 a71371 a71382 a71369 a67809
-lemma VertebrateOrganism : ∀ (x : U), ins x Vertebrate → ins x Organism := 
-begin
-  intros x h,
-  have h₁ : ins subclass_m TransitiveRelation,
-    specialize a15 PartialOrderingRelation TransitiveRelation subclass_m,
-    apply a15,
-      exact ⟨a72180, a71844⟩, --tipa as relações como setorclass
-      exact ⟨a67818, a13⟩, -- usa a "transitividade" do subclass sobre o ins
-  have h₂ : subclass Vertebrate Organism,
-    apply a67809 _  Animal _,
-      exact ⟨a71402, ⟨a72771, a71371⟩⟩,
-      exact h₁,
-      exact ⟨a71382, a71369⟩,
-  apply a15 Vertebrate _ _,
-    exact ⟨a71402, a71371⟩,
-    exact ⟨h₂, h⟩
+   repeat { assumption } 
 end
